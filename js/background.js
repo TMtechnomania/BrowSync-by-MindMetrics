@@ -61,6 +61,7 @@ app.tabs.onCreated.addListener(async (tab) => {
 	};
 
 	todaySessions.tabSessions[tab.id] = tabSession;
+    await app.storage.local.set({ [todaySessions.date]: todaySessions });
 });
 
 // Handle the tab on updated
@@ -83,6 +84,7 @@ app.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 			tabSession.domainVisited.push(new URL(changeInfo.url).hostname);
 		}
 		todaySessions.tabSessions[tabId] = tabSession;
+        await app.storage.local.set({ [todaySessions.date]: todaySessions });
 	}
 });
 
@@ -98,7 +100,7 @@ app.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
 	tabSession.totalLife = tabSession.tabRemoved - tabSession.tabCreated;
 	tabSession.passiveLife = tabSession.totalLife - tabSession.activeLife;
 	todaySessions.tabSessions[tabId] = tabSession;
-	console.log(todaySessions);
+	// console.log(todaySessions);
 	await app.storage.local.set({ [todaySessions.date]: todaySessions });
 });
 
@@ -120,6 +122,7 @@ app.tabs.onActivated.addListener(async (activeInfo) => {
 let tabTimer = null;
 
 async function handleClock(tabSession, time, tabId) {
+    await app.storage.local.set({ [todaySessions.date]: todaySessions });
 	tabSession.distractions += 1;
 	if (tabTimer !== null) clearInterval(tabTimer);
 	tabTimer = setInterval(() => {
@@ -128,34 +131,47 @@ async function handleClock(tabSession, time, tabId) {
 	}, 1000);
 }
 
-app.runtime.onMessage.addListener((request, sender, sendResponse) => {
+app.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+    console.log(sender);
     if (request.type === "urlSession") {
-        const domainSession = todaySessions.urlSessions[request.urlSession.domain];
-        // const urlSession = {
-		// 	domain: domain,
-		// 	clicks: clicks,
-		// 	activeLife: activeLife,
-		// 	distractions: distractions,
-		// 	urlVisited: {
-		// 		url: url,
-		// 		sessionStart: time,
-		// 		sessionEnd: getTime(),
-		// 		sessionDuration: getTime() - time,
-		// 	},
-        //     totalLife: getTime() - time,
-        //     passiveLife: getTime() - time - activeLife,
-		// };
-        if (domainSession === undefined) {
-            todaySessions.urlSessions[request.urlSession.domain] = request.urlSession;
+        const domain = request.urlSession.domain;
+        const clicks = request.urlSession.clicks;
+        const activeLife = request.urlSession.activeLife;
+        const distractions = request.urlSession.distractions;
+        const urlObject = request.urlSession.url;
+        const totalLife = request.urlSession.totalLife;
+        const passiveLife = request.urlSession.passiveLife;
+
+        // Check if the todaySessions object has the domain key in the urlSessions object
+        if (todaySessions.urlSessions[domain] === undefined) {
+            console.log("Domain not found");
+            
+            todaySessions.urlSessions[domain] = {
+                domain: domain,
+                clicks: clicks,
+                activeLife: activeLife,
+                distractions: distractions,
+                urls: [urlObject],
+                totalLife: totalLife,
+                passiveLife: passiveLife,
+            };
         } else {
-            domainSession.clicks += request.urlSession.clicks;
-            domainSession.distractions += request.urlSession.distractions;
-            domainSession.urlVisited.push(request.urlSession.urlVisited);
-            domainSession.totalLife += request.urlSession.totalLife;
-            domainSession.activeLife += request.urlSession.activeLife;
-            domainSession.passiveLife += request.urlSession.passiveLife;
-            todaySessions.urlSessions[request.urlSession.domain] = domainSession;
+            console.log("Domain found");
+            console.log("Old Data", todaySessions.urlSessions[domain]);
+            console.log("New Data", request.urlSession);
+            
+            
+            todaySessions.urlSessions[domain].clicks += clicks;
+            todaySessions.urlSessions[domain].activeLife += activeLife;
+            todaySessions.urlSessions[domain].distractions += distractions;
+            todaySessions.urlSessions[domain].urls.push(urlObject);
+            todaySessions.urlSessions[domain].totalLife += totalLife;
+            todaySessions.urlSessions[domain].passiveLife += passiveLife;
         }
-        app.storage.local.set({ [todaySessions.date]: todaySessions });
+
+        // console.log(todaySessions);
+        await app.storage.local.set({ [todaySessions.date]: todaySessions });
+        console.log("Updated", todaySessions);
+        
     }
 });

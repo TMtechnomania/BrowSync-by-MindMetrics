@@ -77,12 +77,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 			clicks: clicks,
 			activeLife: activeLife,
 			distractions: distractions,
-			urlVisited: {
+			url: {
 				url: url,
 				sessionStart: time,
 				sessionEnd: getTime(),
 				sessionDuration: getTime() - time,
-			},
+            },
             totalLife: getTime() - time,
             passiveLife: getTime() - time - activeLife,
 		};
