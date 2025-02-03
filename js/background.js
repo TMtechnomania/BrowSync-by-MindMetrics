@@ -27,7 +27,7 @@ app.runtime.onInstalled.addListener(async (e) => {
 		const timestamp = getTimestamp();
 		await app.storage.local.set({ initiate: timestamp });
 	} else if (e.reason === "update") {
-		await app.storage.local.clear();
+		// await app.storage.local.clear();
 		const data = await app.storage.local.get("domainDB");
 		if (data.domainDB) {
 			Object.assign(domainDB, data.domainDB);
