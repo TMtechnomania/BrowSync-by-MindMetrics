@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const { domainDB = {} } = await app.storage.local.get(["domainDB"]);
 	console.log("Domain DB", domainDB);
 
+	// fetch the processed data from the storage
+	let { processedData } = await app.storage.local.get("processedData");
 	// Get the stored access token and refresh token
 	const { accessToken, refreshToken, expireTime, refreshExpireTime } =
 		await app.storage.local.get([
@@ -55,118 +57,146 @@ document.addEventListener("DOMContentLoaded", async () => {
 			"refreshExpireTime",
 		]);
 
-	// Get the current timestamp
-	const currentTime = new Date().getTime();
 
-	// If no tokens exist, authenticate for the first time
-	if (!accessToken || !refreshToken || !expireTime || !refreshExpireTime) {
-		console.log("No tokens found, authenticating for the first time...");
-		fetch("https://browsyncbackend.onrender.com/auth", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				username: "test",
-				password: "test@123",
-			}),
-		})
-			.then((res) => res.json())
-			.then(async (data) => {
-				console.log("Authenticated:", data);
-				let expireTime = currentTime + 15 * 60 * 1000; // Access token valid for 15 min
-				let refreshExpireTime = currentTime + 24 * 60 * 60 * 1000; // Refresh token valid for 24 hours
-				await app.storage.local.set({
-					accessToken: data.accessToken,
-					refreshToken: data.refreshToken,
-					expireTime,
-					refreshExpireTime,
+	// If processed data exists, and the domainDB is the same as the one in the processed data, use the processed data
+	if (processedData && JSON.stringify(processedData.domainDB) === JSON.stringify(domainDB))
+		{
+		console.log("Using processed data from storage:", processedData);
+	} else {
+		// Get the current timestamp
+		const currentTime = new Date().getTime();
+
+		// If no tokens exist, authenticate for the first time
+		if (
+			!accessToken ||
+			!refreshToken ||
+			!expireTime ||
+			!refreshExpireTime
+		) {
+			console.log(
+				"No tokens found, authenticating for the first time...",
+			);
+			fetch("https://browsyncbackend.onrender.com/auth", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					username: "test",
+					password: "test@123",
+				}),
+			})
+				.then((res) => res.json())
+				.then(async (data) => {
+					console.log("Authenticated:", data);
+					let expireTime = currentTime + 15 * 60 * 1000; // Access token valid for 15 min
+					let refreshExpireTime = currentTime + 24 * 60 * 60 * 1000; // Refresh token valid for 24 hours
+					await app.storage.local.set({
+						accessToken: data.accessToken,
+						refreshToken: data.refreshToken,
+						expireTime,
+						refreshExpireTime,
+					});
+					location.reload(); // Reload page after getting the tokens
+				})
+				.catch((err) => {
+					console.error("Authentication failed:", err);
 				});
-				location.reload(); // Reload page after getting the tokens
+		}
+		// If refresh token has expired, authenticate again
+		else if (currentTime > refreshExpireTime) {
+			console.log("Refresh Token is expired, re-authenticating...");
+			fetch("https://browsyncbackend.onrender.com/auth", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					username: "test",
+					password: "test@123",
+				}),
 			})
-			.catch((err) => {
-				console.error("Authentication failed:", err);
-			});
-	}
-	// If refresh token has expired, authenticate again
-	else if (currentTime > refreshExpireTime) {
-		console.log("Refresh Token is expired, re-authenticating...");
-		fetch("https://browsyncbackend.onrender.com/auth", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				username: "test",
-				password: "test@123",
-			}),
-		})
-			.then((res) => res.json())
-			.then(async (data) => {
-				console.log("Re-authenticated:", data);
-				let expireTime = currentTime + 15 * 60 * 1000;
-				let refreshExpireTime = currentTime + 24 * 60 * 60 * 1000;
-				await app.storage.local.set({
-					accessToken: data.accessToken,
-					refreshToken: data.refreshToken,
-					expireTime,
-					refreshExpireTime,
+				.then((res) => res.json())
+				.then(async (data) => {
+					console.log("Re-authenticated:", data);
+					let expireTime = currentTime + 15 * 60 * 1000;
+					let refreshExpireTime = currentTime + 24 * 60 * 60 * 1000;
+					await app.storage.local.set({
+						accessToken: data.accessToken,
+						refreshToken: data.refreshToken,
+						expireTime,
+						refreshExpireTime,
+					});
+					location.reload(); // Reload page after getting new tokens
+				})
+				.catch((err) => {
+					console.error("Re-authentication failed:", err);
 				});
-				location.reload(); // Reload page after getting new tokens
+		}
+		// If access token is expired, but refresh token is still valid, refresh access token
+		else if (currentTime > expireTime && currentTime < refreshExpireTime) {
+			console.log("Access Token expired, refreshing...");
+			fetch("https://browsyncbackend.onrender.com/refresh", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					refreshToken,
+				}),
 			})
-			.catch((err) => {
-				console.error("Re-authentication failed:", err);
-			});
-	}
-	// If access token is expired, but refresh token is still valid, refresh access token
-	else if (currentTime > expireTime && currentTime < refreshExpireTime) {
-		console.log("Access Token expired, refreshing...");
-		fetch("https://browsyncbackend.onrender.com/refresh", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				refreshToken,
-			}),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				console.log("Access Token refreshed:", data);
-				let expireTime = currentTime + 15 * 60 * 1000;
-				let refreshExpireTime = currentTime + 24 * 60 * 60 * 1000;
-				app.storage.local.set({
-					accessToken: data.accessToken,
-					refreshToken: data.refreshToken,
-					expireTime,
-					refreshExpireTime,
+				.then((res) => res.json())
+				.then(async (data) => {
+					console.log("Access Token refreshed:", data);
+					let expireTime = currentTime + 15 * 60 * 1000;
+					let refreshExpireTime = currentTime + 24 * 60 * 60 * 1000;
+					await app.storage.local.set({
+						accessToken: data.accessToken,
+						refreshToken: data.refreshToken,
+						expireTime,
+						refreshExpireTime,
+					});
+					location.reload(); // Reload page to use the new access token
+				})
+				.catch((err) => {
+					console.error("Token refresh failed:", err);
 				});
-				location.reload(); // Reload page to use the new access token
+		}
+		// If access token is still valid, process data
+		else {
+			console.log("Access Token is still valid, processing data...");
+			fetch("https://browsyncbackend.onrender.com/process", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					accessToken,
+					domainDB,
+				}),
 			})
-			.catch((err) => {
-				console.error("Token refresh failed:", err);
-			});
-	}
-	// If access token is still valid, process data
-	else {
-		console.log("Access Token is still valid, processing data...");
-		fetch("https://browsyncbackend.onrender.com/process", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				accessToken,
-				domainDB,
-			}),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				console.log("Data processed:", data);
-			})
-			.catch((err) => {
-				console.error("Data processing failed:", err);
-			});
+				.then((res) => res.json())
+				.then(async (data) => {
+					console.log("Data processed:", data);
+
+					if (data.error) {
+						console.error("Data processing failed:", data.error);
+						return;
+					}
+					// store a json object with the processed data as data, domainDB
+					processedData = { data, domainDB };
+					await app.storage.local.set({
+						processedData: {
+							data,
+							domainDB,
+						},
+					});
+					// update the processed data with the new data
+				})
+				.catch((err) => {
+					console.error("Data processing failed:", err);
+				});
+		}
 	}
 
 	const domains = Object.keys(domainDB);
@@ -318,7 +348,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <th>Total Visits</th>
             <th>Total Time</th>
             <th>Activity Ratio</th>
-            <th>Delete</th>
+            <th>Option</th>
         </tr>
     `;
 	list.appendChild(thead);
