@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// If no tokens exist, authenticate for the first time
 	if (!accessToken || !refreshToken || !expireTime || !refreshExpireTime) {
 		console.log("No tokens found, authenticating for the first time...");
-		fetch("https://3001.code.vishalhq.in/auth", {
+		fetch("https://browsyncbackend.onrender.com/auth", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// If refresh token has expired, authenticate again
 	else if (currentTime > refreshExpireTime) {
 		console.log("Refresh Token is expired, re-authenticating...");
-		fetch("https://3001.code.vishalhq.in/auth", {
+		fetch("https://browsyncbackend.onrender.com/auth", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// If access token is expired, but refresh token is still valid, refresh access token
 	else if (currentTime > expireTime && currentTime < refreshExpireTime) {
 		console.log("Access Token expired, refreshing...");
-		fetch("https://3001.code.vishalhq.in/refresh", {
+		fetch("https://browsyncbackend.onrender.com/refresh", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// If access token is still valid, process data
 	else {
 		console.log("Access Token is still valid, processing data...");
-		fetch("https://3001.code.vishalhq.in/process", {
+		fetch("https://browsyncbackend.onrender.com/process", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
