@@ -1,177 +1,123 @@
 const app = chrome || browser;
 
-function getDate() {
-	return new Date().toISOString().split("T")[0].split("-").reverse().join("");
+// Get current timestamp
+function getTimestamp() {
+	const now = new Date();
+    return Math.floor(now.getTime() / 1000);
 }
 
-function getTime() {
-	const now = new Date();
-	return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-}
+// Get the current date as YYYYMMDD
+// function getDate() {
+// 	const now = new Date();
+
+// 	const year = now.getFullYear();
+// 	const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+// 	const day = String(now.getDate()).padStart(2, "0");
+// 	return `${year}${month}${day}`;
+// }
+
+const startTime = getTimestamp();
+// const date = getDate();
+
+const domainDB = {};
 
 // Store the date on install as the first data recorded reference
 app.runtime.onInstalled.addListener(async (e) => {
 	if (e.reason === "install") {
-		const date = getDate();
-		await app.storage.local.set({ initiate: date });
+		const timestamp = getTimestamp();
+		await app.storage.local.set({ initiate: timestamp });
 	} else if (e.reason === "update") {
-		// clear the storage on update and re-initiate the storage
 		await app.storage.local.clear();
-		const date = getDate();
-		await app.storage.local.set({ initiate: date });
+		const data = await app.storage.local.get("domainDB");
+		if (data.domainDB) {
+			Object.assign(domainDB, data.domainDB);
+		} else {
+			await app.storage.local.set({ domainDB });
+		}
+		console.log("Data stored in the DB", domainDB);
 	}
 });
 
-const todaySessions = {
-	date: getDate(),
-	sessionStart: getTime(),
-	tabSessions: {},
-	urlSessions: {},
-};
-
-// Handle the tab sessions on start
+// Handle Startup
 app.runtime.onStartup.addListener(async () => {
-    const date = getDate();
-    const time = getTime();
-    const storage = await app.storage.local.get();
-    if (storage[date] === undefined) {
-        await app.storage.local.set({ [date]: todaySessions });
-    } else {
-        // todaySessions = storage[date];
-        Object.assign(todaySessions, storage[date]);
-    }
-});
-
-// Handle the tab sessions on creation
-app.tabs.onCreated.addListener(async (tab) => {
-	const date = getDate();
-	const time = getTime();
-
-	const tabSession = {
-		tabId: tab.id,
-		tabCreated: time,
-		tabRemoved: null,
-		urlsVisited: [],
-		domainVisited: [],
-		totalTabs: tab.index,
-		totalLife: 0,
-		activeLife: 0,
-		passiveLife: 0,
-		distractions: 0,
-	};
-
-	todaySessions.tabSessions[tab.id] = tabSession;
-    await app.storage.local.set({ [todaySessions.date]: todaySessions });
-});
-
-// Handle the tab on updated
-app.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    const date = getDate();
-    const time = getTime();
-	if (changeInfo.url) {
-		const tabSession = todaySessions.tabSessions[tabId];
-		if (tabSession === undefined) {
-			return;
-		}
-		const urlVisited = {
-			url: changeInfo.url,
-			time: time,
-		};
-		tabSession.urlsVisited.push(urlVisited);
-		if (
-			!tabSession.domainVisited.includes(new URL(changeInfo.url).hostname)
-		) {
-			tabSession.domainVisited.push(new URL(changeInfo.url).hostname);
-		}
-		todaySessions.tabSessions[tabId] = tabSession;
-        await app.storage.local.set({ [todaySessions.date]: todaySessions });
+	// Check if the domainLog exists in the storage, if yes, then load it or else create a new one
+	const data = await app.storage.local.get("domainDB");
+	if (data.domainDB) {
+		Object.assign(domainDB, data.domainDB);
+	} else {
+		await app.storage.local.set({ domainDB });
 	}
 });
 
-// Handle the tab on removed
-app.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
-	const date = getDate();
-	const time = getTime();
-	const tabSession = todaySessions.tabSessions[tabId];
-    if (tabSession === undefined) {
-        return;
-    }
-	tabSession.tabRemoved = time;
-	tabSession.totalLife = tabSession.tabRemoved - tabSession.tabCreated;
-	tabSession.passiveLife = tabSession.totalLife - tabSession.activeLife;
-	todaySessions.tabSessions[tabId] = tabSession;
-	// console.log(todaySessions);
-	await app.storage.local.set({ [todaySessions.date]: todaySessions });
-});
+let isDataCollected = false;
 
-// Handle the tab on activated
-app.tabs.onActivated.addListener(async (activeInfo) => {
-	if (activeInfo.tabId) {
-		const date = getDate();
-		const time = getTime();
-		const tabSession = todaySessions.tabSessions[activeInfo.tabId];
-		clearInterval(tabTimer);
-        if (tabSession === undefined) {
-            return;
-        }
-			await handleClock(tabSession, time, activeInfo.tabId);
-		
-	}
-});
-
-let tabTimer = null;
-
-async function handleClock(tabSession, time, tabId) {
-    await app.storage.local.set({ [todaySessions.date]: todaySessions });
-	tabSession.distractions += 1;
-	if (tabTimer !== null) clearInterval(tabTimer);
-	tabTimer = setInterval(() => {
-		tabSession.activeLife += 1;
-		todaySessions.tabSessions[tabId] = tabSession;
-	}, 1000);
-}
-
+// Handle the data from the content script
 app.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-    console.log(sender);
-    if (request.type === "urlSession") {
-        const domain = request.urlSession.domain;
-        const clicks = request.urlSession.clicks;
-        const activeLife = request.urlSession.activeLife;
-        const distractions = request.urlSession.distractions;
-        const urlObject = request.urlSession.url;
-        const totalLife = request.urlSession.totalLife;
-        const passiveLife = request.urlSession.passiveLife;
+	const data = await app.storage.local.get("domainDB");
+	if (data.domainDB) {
+		Object.assign(domainDB, data.domainDB);
+	} else {
+		await app.storage.local.set({ domainDB });
+	}
+	if (request.type === "urlSession") {
+		isDataCollected = true;
+		// console.log("Received data from the content script");
+		const domain = request.urlSession.domain;
+		const clicks = request.urlSession.clicks;
+		const totalLife = request.urlSession.sessionDuration;
+		const activeLife = request.urlSession.activeSession;
+		const passiveLife = request.urlSession.passiveSession;
+		const distractions = request.urlSession.distractions;
+		const urlObject = request.urlSession;
+		if (domainDB[domain]) {
+			// console.log("Domain exists in the DB", domain);
+			if (totalLife === 0) {
+				return; // Do not store data if the session duration is 0
+			}
+			domainDB[domain].clicks += clicks;
+			domainDB[domain].totalLife += totalLife;
+			domainDB[domain].activeLife += activeLife;
+			domainDB[domain].passiveLife += passiveLife;
+			domainDB[domain].distractions += distractions;
+			domainDB[domain].urlVisited.push(urlObject);
+		} else {
+			// console.log("Domain does not exist in the DB", domain);
+			domainDB[domain] = {
+				clicks,
+				totalLife,
+				activeLife,
+				passiveLife,
+				distractions,
+				urlVisited: [urlObject],
+			};
+		}
+		await app.storage.local.set({ domainDB });
+		console.log("Data stored in the DB", domainDB);
+		setTimeout(() => {
+			isDataCollected = false;
+		}, 1000);
+	} else if (request.type === "usageReminder") {
+		const domain = request.domain;
+		const time = request.time;
+		app.notifications.create({
+			type: "basic",
+			iconUrl: "/icons/icon128.png",
+			title: "Usage Reminder",
+			message: `You have been on ${domain} for ${time}. Take a break!`,
+		});
+	}
+});
 
-        // Check if the todaySessions object has the domain key in the urlSessions object
-        if (todaySessions.urlSessions[domain] === undefined) {
-            console.log("Domain not found");
-            
-            todaySessions.urlSessions[domain] = {
-                domain: domain,
-                clicks: clicks,
-                activeLife: activeLife,
-                distractions: distractions,
-                urls: [urlObject],
-                totalLife: totalLife,
-                passiveLife: passiveLife,
-            };
-        } else {
-            console.log("Domain found");
-            console.log("Old Data", todaySessions.urlSessions[domain]);
-            console.log("New Data", request.urlSession);
-            
-            
-            todaySessions.urlSessions[domain].clicks += clicks;
-            todaySessions.urlSessions[domain].activeLife += activeLife;
-            todaySessions.urlSessions[domain].distractions += distractions;
-            todaySessions.urlSessions[domain].urls.push(urlObject);
-            todaySessions.urlSessions[domain].totalLife += totalLife;
-            todaySessions.urlSessions[domain].passiveLife += passiveLife;
-        }
-
-        // console.log(todaySessions);
-        await app.storage.local.set({ [todaySessions.date]: todaySessions });
-        console.log("Updated", todaySessions);
-        
-    }
+// observer for tab url change (not creation of tabs), and send a message to content script to start tracking
+app.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+	if (
+		changeInfo.url &&
+		isDataCollected === false &&
+		new URL(changeInfo.url).hostname.includes(".")
+	) {
+		setTimeout(() => {
+			console.log("sending message to content script");
+			app.tabs.sendMessage(tabId, { type: "sendData" });
+		}, 500);
+	}	
 });

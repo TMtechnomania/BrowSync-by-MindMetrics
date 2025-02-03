@@ -1,0 +1,165 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	--scale: 1;
+	text-decoration: none;
+	color: white;
+}
+
+:root {
+    --bg: #1a1f24;
+    --bg2: #2a3038;
+    --gray: #9ca3af;
+    --blue: #3b82f6;
+}
+
+/* style scrollbar width */
+::-webkit-scrollbar {
+    width: 0;
+    padding: 0;
+}
+
+body {
+	align-items: center;
+	background: linear-gradient(0, #000, #1a1f24);
+	font-family: "Poppins", sans-serif;
+	justify-content: center;
+	padding: 0 calc(10vw * var(--scale));
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: calc(64px * var(--scale));
+    width: 100%;
+}
+
+header #logo {
+    height: calc(64px * var(--scale));
+    padding: calc(16px * var(--scale));
+}
+
+main {
+    padding: calc(16px * var(--scale));
+}
+
+main p {
+    color: var(--gray);
+    font-size: calc(16px * var(--scale));
+    margin-bottom: calc(8px * var(--scale));
+}
+
+.flex {
+    display: flex;
+    gap: calc(16px * var(--scale));
+    /* justify-content: space-between; */
+}
+
+.flex div {
+    flex-grow: 1;
+}
+
+#domain {
+    background: var(--bg2);
+    border-radius: calc(8px * var(--scale));
+    color: var(--gray);
+    font-size: calc(16px * var(--scale));
+    margin-bottom: calc(16px * var(--scale));
+    overflow: hidden;
+    padding: calc(16px * var(--scale));
+}
+
+#domainLogo {
+    border-radius: calc(8px * var(--scale));
+    height: calc(128px * var(--scale));
+    width: calc(128px * var(--scale));
+}
+
+#domainName {
+    font-size: calc(32px * var(--scale));
+    font-weight: 600;
+    margin-bottom: calc(16px * var(--scale));
+}
+
+.settings h2 {
+    font-size: calc(24px * var(--scale));
+    font-weight: 400;
+    margin-bottom: calc(8px * var(--scale));
+}
+
+.settings p {
+    color: white;
+    margin-bottom: calc(8px * var(--scale));
+}
+
+.settings select {
+    background: var(--bg);
+    border: none;
+    border-radius: calc(4px * var(--scale));
+    color: white;
+    font-size: calc(16px * var(--scale));
+    padding: calc(8px * var(--scale));
+}
+
+.settings.flex {
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#table {
+    background: var(--bg2);
+    border-radius: calc(8px * var(--scale));
+    padding: calc(8px * var(--scale));
+    overflow: hidden;
+    width: 100%;
+}
+
+#table tr {
+    width: inherit;
+    border-bottom: 2px solid var(--gray);
+    height: calc(64px * var(--scale));
+}
+
+#table tbody tr:hover {
+    background: var(--bg);
+}
+
+/* #table tbody tr:hover td a {
+    background: var(--blue);
+    } */
+    
+    #table thead {
+        color: var(--gray);
+        font-size: calc(20px * var(--scale));
+        padding: calc(8px * var(--scale));
+    }
+    
+    #table tbody {
+        color: white;
+        font-size: calc(16px * var(--scale));
+        padding: calc(8px * var(--scale));
+        text-align: center;
+    }
+    
+    #table tr td img {
+        height: calc(48px * var(--scale));
+        width: calc(48px * var(--scale));
+    }
+    
+    #table td {
+    padding: calc(8px * var(--scale));
+    max-width: calc(300px * var(--scale));
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#table td a {
+    background: var(--bg);
+    color: white;
+    font-weight: 600;
+    padding: calc(8px * var(--scale)) calc(12px * var(--scale));
+    border-radius: calc(4px * var(--scale));
+}

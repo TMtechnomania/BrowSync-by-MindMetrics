@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard | BrowSync</title>
+		<link rel="stylesheet" href="/css/website.css" />
+		<link rel="shortcut icon" href="/icons/128.png" type="image/x-icon" />
+	</head>
+	<body>
+		<header>
+			<img src="/icons/128.png" alt="BrowSync" id="logo" />
+			<h1>BrowSync</h1>
+		</header>
+		<main>
+			<div id="domain">
+				<div class="flex">
+					<img src="" alt="" id="domainLogo" />
+					<div>
+                        <div class="flex">
+                            <h1 id="domainName"></h1>
+                            <div class="settings flex">
+                                <h2>Blacklist this domain:</h2>
+                                <select name="blacklist" id="blacklist">
+                                    <option value="no">Never</option>
+                                    <option value="yes">Always</option>
+                                </select>
+                            </div>
+                            <div class="settings flex">
+                                <h2>Set Usage Reminder:</h2>
+                                <select name="usageReminder" id="usageReminder">
+                                    <option value="never">Never</option>
+                                    <option value="30m">30m</option>
+                                    <option value="1h">1h</option>
+                                    <option value="2h">2h</option>
+                                    <option value="4h">4h</option>
+                                </select>
+                            </div>
+                        </div>
+						<div class="flex">
+							<div>
+								<p>Total Time Spent:</p>
+								<h2 id="totalTimeSpent">2h 30m</h2>
+							</div>
+							<div>
+								<p>Total sessions:</p>
+								<h2 id="totalSessions">10</h2>
+							</div>
+							<div>
+								<p>Active Time:</p>
+								<h2 id="activeTime">1h 30m</h2>
+							</div>
+							<div>
+								<p>Passive Time:</p>
+								<h2 id="passiveTime">1h 30m</h2>
+							</div>
+							<div>
+								<p>Activity Ratio:</p>
+								<h2 id="activityRatio">1.5</h2>
+							</div>
+							<div>
+								<p>Total Distractions:</p>
+								<h2 id="totalDistractions">10</h2>
+							</div>
+							<div>
+								<p>Total Interactions:</p>
+								<h2 id="totalInteractions">20</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<table id="table"></table>
+		</main>
+		<script src="/js/website.js"></script>
+	</body>
+</html>

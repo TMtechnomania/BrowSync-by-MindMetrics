@@ -1,0 +1,207 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	--scale: 1;
+	text-decoration: none;
+	color: white;
+}
+
+:root {
+    --bg: #1a1f24;
+    --bg2: #2a3038;
+    --gray: #9ca3af;
+    --blue: #3b82f6;
+}
+
+/* style scrollbar width */
+::-webkit-scrollbar {
+    width: 0;
+    padding: 0;
+}
+
+body {
+	align-items: center;
+	background: linear-gradient(0, #000, #1a1f24);
+	font-family: "Poppins", sans-serif;
+	justify-content: center;
+	padding: 0 calc(240px * var(--scale));
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: calc(64px * var(--scale));
+    width: 100%;
+}
+
+header #logo {
+    height: calc(64px * var(--scale));
+    padding: calc(16px * var(--scale));
+}
+
+main {
+    padding: calc(16px * var(--scale));
+}
+
+main p {
+    color: var(--gray);
+    font-size: calc(16px * var(--scale));
+    margin-bottom: calc(8px * var(--scale));
+}
+
+main #sessionsCount {
+    color: white;
+    font-size: calc(40px * var(--scale));
+    font-weight: 600;
+    margin-bottom: calc(16px * var(--scale));
+}
+
+.flex {
+    display: flex;
+    gap: calc(16px * var(--scale));
+    justify-content: space-between;
+}
+
+#panel {
+    background: var(--bg2);
+    border-radius: calc(8px * var(--scale));
+    padding: calc(8px * var(--scale));
+    margin-bottom: calc(16px * var(--scale));
+}
+
+#panel div {
+    border-radius: calc(8px * var(--scale));
+    height: fit-content;
+    padding: calc(16px * var(--scale));
+    width: calc(240px * var(--scale));
+    min-width: calc(160px * var(--scale));
+    overflow: hidden;
+}
+
+#panel div:hover {
+    background: linear-gradient(0, #000, #1a1f24);
+}
+
+#panel h2 {
+    color: var(--gray);
+    font-size: calc(32px * var(--scale));
+    text-align: center;
+}
+
+#panel img {
+    display: block;
+    margin: 0 auto;
+    height: calc(38px * var(--scale));
+}
+
+#panel p {
+    color: white;
+    font-size: calc(20px * var(--scale));
+    font-weight: 600;
+    text-align: center;
+}
+
+.graphs3 {
+    display: flex;
+    gap: calc(16px * var(--scale));
+    overflow-x: scroll;
+}
+
+.graphs3 div {
+    background: var(--bg2);
+    border-radius: calc(8px * var(--scale));
+    height: fit-content;
+    list-style: none;
+    padding: calc(16px * var(--scale));
+    width: 100%;
+}
+
+.graphs3 div p {
+    color: white;
+    font-size: calc(20px * var(--scale));
+    margin-bottom: calc(16px * var(--scale));
+}
+
+.graph {
+    font-size: calc(16px * var(--scale));
+}
+
+.graph li {
+    align-items: center;
+    display: flex;
+    font-size: calc(16px * var(--scale));
+    justify-content: space-between;
+    margin-bottom: calc(12px * var(--scale));
+    position: relative;
+    height: calc(32px * var(--scale));
+}
+
+.graph li::before {
+    background: var(--gray);
+    border-radius: calc(4px * var(--scale));
+    content: "";
+    height: calc(8px * var(--scale));
+    position: absolute;
+    top: calc(100%);
+    width: 100%;
+}
+
+.graph li::after {
+    background: var(--blue);
+    border-radius: calc(4px * var(--scale));
+    content: "";
+    height: calc(8px * var(--scale));
+    position: absolute;
+    top: calc(100%);
+    width: var(--height);
+}
+
+#list {
+    background: var(--bg2);
+    border-radius: calc(8px * var(--scale));
+    padding: calc(8px * var(--scale));
+    width: 100%;
+}
+
+#list tr {
+    width: 100%;
+    border-bottom: 2px solid var(--gray);
+    height: calc(48px * var(--scale));
+}
+
+#list tbody tr:hover {
+    background: var(--bg);
+}
+
+/* #list tbody tr:hover td a {
+    background: var(--blue);
+} */
+
+#list thead {
+    color: var(--gray);
+    font-size: calc(20px * var(--scale));
+    padding: calc(8px * var(--scale));
+}
+
+#list tbody {
+    color: white;
+    font-size: calc(16px * var(--scale));
+    padding: calc(8px * var(--scale));
+    text-align: center;
+}
+
+#list tr td img {
+    height: calc(20px * var(--scale));
+    width: calc(20px * var(--scale));
+}
+
+#list td a {
+    background: var(--bg);
+    color: white;
+    font-weight: 600;
+    padding: calc(8px * var(--scale)) calc(12px * var(--scale));
+    border-radius: calc(4px * var(--scale));
+}

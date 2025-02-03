@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard | BrowSync</title>
+		<link rel="stylesheet" href="/css/dashboard.css" />
+		<link rel="shortcut icon" href="/icons/128.png" type="image/x-icon" />
+	</head>
+	<body>
+		<header>
+			<img src="/icons/128.png" alt="BrowSync" id="logo" />
+			<h1>BrowSync</h1>
+		</header>
+		<main>
+			<p>Sessions over time:</p>
+			<h1 id="sessionsCount">283 Sessions</h1>
+			<!-- long dashboard panel with all analytics -->
+			<div id="panel" class="flex">
+				<div>
+					<p>Total Time Spent:</p>
+					<h2 id="totalTimeSpent">2h 30m</h2>
+				</div>
+				<div>
+					<p>Most Visited Site:</p>
+					<img id="mostVisitedSite"></img>
+				</div>
+				<div>
+					<p>Least Visited Site:</p>
+					<img id="leastVisitedSite"></img>
+				</div>
+				<div>
+					<p>Total Distractions:</p>
+					<h2 id="totalDistractions">10</h2>
+				</div>
+				<div>
+					<p>Total Interactions:</p>
+					<h2 id="totalInteractions">20</h2>
+				</div>
+			</div>
+			<section class="graphs3">
+				<div>
+					<p>Top Sites based on Time spent:</p>
+					<ol id="top5List" class="graph"></ol>
+				</div>
+				<div>
+					<p>Top Sites based on Visits:</p>
+					<ol id="top5Visits" class="graph"></ol>
+				</div>
+			</section>
+            <table id="list"></table>
+		</main>
+		<script src="/js/dashboard.js"></script>
+	</body>
+</html>

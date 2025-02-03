@@ -1,0 +1,90 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	--scale: 1;
+	text-decoration: none;
+	color: white;
+}
+
+body {
+	align-items: center;
+	background: linear-gradient(0, #000, #1a1f24);
+	font-family: "Poppins", sans-serif;
+	height: fit-content;
+	justify-content: center;
+	padding: calc(8px * var(--scale));
+	width: calc(240px * var(--scale));
+}
+
+section {
+	/* background: #fff; */
+	border-radius: calc(8px * var(--scale));
+	height: 100%;
+	padding: calc(8px * var(--scale));
+	width: 100%;
+}
+
+#logo {
+	height: calc(32px * var(--scale));
+	display: block;
+	margin-inline: auto;
+	margin-bottom: calc(20px * var(--scale));
+	width: auto;
+}
+
+#domain {
+	/* color: #333; */
+	display: block;
+	font-size: calc(20px * var(--scale));
+	font-weight: 600;
+	margin-bottom: calc(16px * var(--scale));
+	text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.flex {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.flex > div {
+	margin-bottom: calc(8px * var(--scale));
+	text-align: center;
+	background: #2a3038;
+	width: 100%;
+	padding: calc(8px * var(--scale));
+	border-radius: calc(8px * var(--scale));
+	height: calc(72px * var(--scale));
+}
+
+.flex h2 {
+	/* color: #333; */
+	display: block;
+	font-size: calc(16px * var(--scale));
+	font-weight: 400;
+	margin-bottom: calc(8px * var(--scale));
+	text-align: center;
+}
+
+.flex p {
+	/* color: #333; */
+	display: block;
+	font-size: calc(24px * var(--scale));
+	font-weight: 600;
+	text-align: center;
+}
+a {
+	background: #333;
+	border-radius: calc(8px * var(--scale));
+	color: #fff;
+	display: block;
+	font-size: calc(16px * var(--scale));
+	font-weight: 600;
+	padding: calc(8px * var(--scale)) calc(16px * var(--scale));
+	text-align: center;
+	width: 100%;
+}
