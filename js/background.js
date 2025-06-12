@@ -3,18 +3,8 @@ const app = chrome || browser;
 // Get current timestamp
 function getTimestamp() {
 	const now = new Date();
-    return Math.floor(now.getTime() / 1000);
+	return Math.floor(now.getTime() / 1000);
 }
-
-// Get the current date as YYYYMMDD
-// function getDate() {
-// 	const now = new Date();
-
-// 	const year = now.getFullYear();
-// 	const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-// 	const day = String(now.getDate()).padStart(2, "0");
-// 	return `${year}${month}${day}`;
-// }
 
 const startTime = getTimestamp();
 // const date = getDate();
@@ -119,5 +109,5 @@ app.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 			console.log("sending message to content script");
 			app.tabs.sendMessage(tabId, { type: "sendData" });
 		}, 500);
-	}	
+	}
 });

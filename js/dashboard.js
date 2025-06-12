@@ -57,10 +57,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 			"refreshExpireTime",
 		]);
 
-
 	// If processed data exists, and the domainDB is the same as the one in the processed data, use the processed data
-	if (processedData && JSON.stringify(processedData.domainDB) === JSON.stringify(domainDB))
-		{
+	if (
+		processedData &&
+		JSON.stringify(processedData.domainDB) === JSON.stringify(domainDB)
+	) {
 		console.log("Using processed data from storage:", processedData);
 	} else {
 		// Get the current timestamp

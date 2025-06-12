@@ -46,11 +46,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 			totalTime.textContent = `${minutes}m ${seconds}s`;
 		}
 
-        // get activity ratio based on active and passive session
-        const activityRatioValue = Math.floor(
-            (domainData.activeLife / domainData.totalLife) * 100,
-        );
-        activityRatio.textContent = `${activityRatioValue}%`;
+		// get activity ratio based on active and passive session
+		const activityRatioValue = Math.floor(
+			(domainData.activeLife / domainData.totalLife) * 100,
+		);
+		activityRatio.textContent = `${activityRatioValue}%`;
 
 		// send message to content.js to get the current session data as response every second
 		setInterval(() => {
@@ -74,13 +74,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 							totalTime.textContent = `${minutes}m ${seconds}s`;
 						}
 
-                        // get activity ratio based on active and passive session
-                        const currentTotalActiveLife = domainData.activeLife + sessionData.activeSession;
-                        const currentTotalLife = domainData.totalLife + sessionData.sessionDuration;
-                        const activityRatioValue = Math.floor(
-                            (currentTotalActiveLife / currentTotalLife) * 100,
-                        );
-                        activityRatio.textContent = `${activityRatioValue}%`;
+						// get activity ratio based on active and passive session
+						const currentTotalActiveLife =
+							domainData.activeLife + sessionData.activeSession;
+						const currentTotalLife =
+							domainData.totalLife + sessionData.sessionDuration;
+						const activityRatioValue = Math.floor(
+							(currentTotalActiveLife / currentTotalLife) * 100,
+						);
+						activityRatio.textContent = `${activityRatioValue}%`;
 					},
 				);
 			});
@@ -115,12 +117,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 										totalTime.textContent = `${minutes}m ${seconds}s`;
 									}
 
-                                    // get activity ratio based on active and passive session
-                                    const activityRatioValue = Math.floor(
-                                        (sessionData.activeSession / sessionData.sessionDuration) * 100,
-                                    );
-                                    activityRatio.textContent = `${activityRatioValue}%`;
-
+									// get activity ratio based on active and passive session
+									const activityRatioValue = Math.floor(
+										(sessionData.activeSession /
+											sessionData.sessionDuration) *
+											100,
+									);
+									activityRatio.textContent = `${activityRatioValue}%`;
 								},
 							);
 						},
@@ -131,8 +134,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 			}
 		}, 1000);
 	} else {
-        totalVisits.textContent = "N/A";
-        totalTime.textContent = "N/A";
-        activityRatio.textContent = "N/A";
-    }
+		totalVisits.textContent = "N/A";
+		totalTime.textContent = "N/A";
+		activityRatio.textContent = "N/A";
+	}
 });
