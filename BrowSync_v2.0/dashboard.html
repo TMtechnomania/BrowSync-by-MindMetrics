@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard | BrowSync</title>
+		<link rel="shortcut icon" href="/icons/128.png" type="image/x-icon" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+			rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Icons"
+			rel="stylesheet"
+			data-material-icons />
+		<link rel="stylesheet" href="/css/dashboard.css" />
+		<script src="/js/theme.js"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="container">
+				<div class="brand">
+					<img
+						src="/icons/128.png"
+						alt="BrowSync"
+						class="brand-logo" />
+					<div class="brand-text">
+						<span class="brand-subtitle">BrowSync</span>
+						<h1 class="brand-title">Productivity Dashboard</h1>
+					</div>
+				</div>
+				<div class="header-actions">
+					<button
+						id="themeToggle"
+						class="icon-btn"
+						title="Toggle theme">
+						<span class="material-icons icon-sun">light_mode</span>
+						<span class="material-icons icon-moon">dark_mode</span>
+					</button>
+					<button id="refreshBtn" class="btn-primary">
+						<span>Refresh</span>
+						<span class="material-icons">refresh</span>
+					</button>
+				</div>
+			</div>
+		</header>
+		<main class="main">
+			<div class="container">
+				<section class="section" id="today-snapshot">
+					<h2 class="section-title">Today's Snapshot</h2>
+					<div class="today-grid">
+						<div class="score-card card">
+							<span class="card-label"
+								>Daily Productivity Score</span
+							>
+							<span id="dailyScoreValue" class="score-value"
+								>0</span
+							>
+							<p id="dailyScoreMessage" class="card-subtitle">
+								Analyzing today's activity...
+							</p>
+						</div>
+						<div class="stat-card card">
+							<span class="card-label">Time Tracked (Today)</span>
+							<span id="todayTime" class="stat-value">0m 0s</span>
+						</div>
+						<div class="stat-card card">
+							<span class="card-label">Context Switches</span>
+							<span id="todayContextSwitches" class="stat-value"
+								>0</span
+							>
+						</div>
+						<div class="stat-card card">
+							<span class="card-label">Distraction Switches</span>
+							<span
+								id="todayDistractionSwitches"
+								class="stat-value"
+								>0</span
+							>
+						</div>
+					</div>
+				</section>
+				<section class="section" id="recent-activity">
+					<h2 class="section-title">Recent Activity</h2>
+					<div class="category-legend" id="categoryLegend"></div>
+					<div class="chart-grid three-charts">
+						<div class="card chart-card chart-card-24h">
+							<header class="chart-card-header">
+								<div>
+									<h3 class="chart-card-title">
+										Last 24 hours
+									</h3>
+									<p
+										id="chart24hSubtitle"
+										class="chart-card-subtitle">
+										Loading...
+									</p>
+								</div>
+								<span
+									id="chart24hRange"
+									class="chart-card-range"></span>
+							</header>
+							<div id="chart24h" class="chart-placeholder">
+								Loading chart...
+							</div>
+							<footer
+								id="chart24hFooter"
+								class="chart-card-footer">
+								Loading...
+							</footer>
+						</div>
+						<div class="card chart-card chart-card-7d">
+							<header class="chart-card-header">
+								<div>
+									<h3 class="chart-card-title">
+										Last 7 days
+									</h3>
+									<p
+										id="chart7dSubtitle"
+										class="chart-card-subtitle">
+										Loading...
+									</p>
+								</div>
+								<span
+									id="chart7dRange"
+									class="chart-card-range"></span>
+							</header>
+							<div id="chart7d" class="chart-placeholder">
+								Loading chart...
+							</div>
+							<footer
+								id="chart7dFooter"
+								class="chart-card-footer">
+								Loading...
+							</footer>
+						</div>
+						<div class="card chart-card chart-card-30d">
+							<header class="chart-card-header">
+								<div>
+									<h3 class="chart-card-title">
+										Last 30 days
+									</h3>
+									<p
+										id="chart30dSubtitle"
+										class="chart-card-subtitle">
+										Loading...
+									</p>
+								</div>
+								<span
+									id="chart30dRange"
+									class="chart-card-range"></span>
+							</header>
+							<div id="chart30d" class="chart-placeholder">
+								Loading chart...
+							</div>
+							<footer
+								id="chart30dFooter"
+								class="chart-card-footer">
+								Loading...
+							</footer>
+						</div>
+					</div>
+				</section>
+				<section class="section" id="search-history">
+					<h2 class="section-title">Search 30-Day History</h2>
+					<div class="card">
+						<div class="search-wrapper">
+							<span class="material-icons">search</span>
+							<input
+								type="text"
+								id="searchInput"
+								placeholder="Search by title (e.g., 'Google Docs', 'Reddit')"
+								class="search-input" />
+						</div>
+						<div
+							id="searchResults"
+							class="search-results-container"></div>
+					</div>
+				</section>
+				<section class="section" id="domain-habits">
+					<h2 class="section-title">My Habits</h2>
+					<div class="top-sites-grid">
+						<div class="card top-sites-card">
+							<div class="card-header">
+								<h3 class="card-title">Top 5 by Time</h3>
+							</div>
+							<div id="top5ListTime" class="top-sites-list"></div>
+						</div>
+						<div class="card top-sites-card">
+							<div class="card-header">
+								<h3 class="card-title">Top 5 by Visits</h3>
+							</div>
+							<div
+								id="top5ListVisits"
+								class="top-sites-list"></div>
+						</div>
+					</div>
+					<h3 class="section-subtitle">All Domains</h3>
+					<div class="card">
+						<div class="table-controls">
+							<div class="search-wrapper">
+								<span class="material-icons">filter_list</span>
+								<input
+									type="text"
+									id="domainFilterInput"
+									placeholder="Filter domains..."
+									class="search-input" />
+							</div>
+							<div class="sort-controls">
+								<label for="sortSelect">Sort by:</label>
+								<select id="sortSelect" class="control-select">
+									<option value="alphabetical">
+										Domain (A-Z)
+									</option>
+									<option value="totalLife" selected>
+										Total Time
+									</option>
+									<option value="visitCount">
+										Total Visits
+									</option>
+									<option value="lastVisit">
+										Last Visit
+									</option>
+								</select>
+							</div>
+						</div>
+						<div class="table-wrapper">
+							<table class="data-table">
+								<thead>
+									<tr>
+										<th>Domain</th>
+										<th>Category</th>
+										<th>Total Time</th>
+										<th>Active Time</th>
+										<th>Activity</th>
+										<th>Visits</th>
+										<th>Clicks</th>
+										<th>Tab Switches</th>
+										<th>Last Visit</th>
+									</tr>
+								</thead>
+								<tbody id="domainTableBody"></tbody>
+							</table>
+						</div>
+					</div>
+				</section>
+				<section class="section" id="archive-section">
+					<h2 class="section-title">Historical Archive</h2>
+					<div class="card">
+						<p class="card-subtitle">
+							Summary of activity older than 30 days.
+						</p>
+						<div id="archiveList" class="archive-container"></div>
+					</div>
+				</section>
+			</div>
+		</main>
+		<script src="/js/dashboard.js" defer></script>
+	</body>
+</html>

@@ -3,75 +3,324 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Dashboard | BrowSync</title>
-		<link rel="stylesheet" href="/css/website.css" />
+		<title>Domain Details | BrowSync</title>
 		<link rel="shortcut icon" href="/icons/128.png" type="image/x-icon" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" data-material-icons />
+	<script src="/js/tailwind-config.js"></script>
+	<script src="/js/3.4.17.js"></script>
+		<style>
+			:root{ --accent: #FF6B35; --accent-2: #DC2626; --accent-start: var(--accent); --accent-end: var(--accent); --accent-dark-start: #FF7A4C; --accent-dark-end: #FF7A4C; }
+			body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+			.gradient-text-strong { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+			.btn-primary { background: var(--accent); color: #0B1220; border-radius: 10px; padding: .5rem 1rem; font-weight: 600; transition: filter 0.2s ease; border: none; }
+			.btn-danger { background: var(--accent-2); color: #FFFFFF; border-radius: 9999px; padding: .35rem .75rem; font-weight: 600; border: none; transition: filter 0.2s ease; }
+			.btn-primary:hover, .btn-danger:hover { filter: brightness(0.95); }
+			.dark .btn-primary { background: #FF7A4C !important; color: #0B1220 !important; }
+			.dark .btn-danger { background: var(--accent-2) !important; }
+			.table-row-hover:hover { background: linear-gradient(90deg, rgba(255,107,53,0.06), rgba(220,38,38,0.04)); }
+			/* modern cards: remove shadows for a flatter look */
+			.rounded-2xl, .rounded-3xl { box-shadow: none !important; border-color: rgba(17,24,39,0.06); }
+			.border { border-color: rgba(17,24,39,0.06) !important; }
+			.shadow-sm, .shadow-lg { box-shadow: none !important; }
+
+			/* table row hover accent (light / dark) */
+			#list tbody tr:hover,
+			table#table tbody tr:hover,
+			#domainTableBody tr:hover,
+			#sessionTableBody tr:hover,
+			.table-row-hover:hover {
+				background-color: rgba(255,107,53,0.06) !important;
+			}
+			.dark #list tbody tr:hover,
+			.dark table#table tbody tr:hover,
+			.dark #domainTableBody tr:hover,
+			.dark #sessionTableBody tr:hover,
+			.dark .table-row-hover:hover {
+				background-color: rgba(220,38,38,0.08) !important;
+			}
+
+			/* punchy table header row (full-width gradient) */
+			table thead,
+			table thead tr {
+				background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%) !important;
+			}
+			table thead th {
+				background: transparent !important;
+				color: #1F2937 !important; /* dark gray text on orange */
+				border-bottom: none !important;
+			}
+			.dark table thead,
+			.dark table thead tr {
+				background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 100%) !important;
+			}
+			.dark table thead th {
+				background: transparent !important;
+				color: #F9FAFB !important; /* off-white in dark mode */
+			}
+			/* typography based on golden ratio */
+			:root { font-size: 16px; }
+			body { font-size: 1rem; }
+			h1, h2, h3 { letter-spacing: -0.01em; line-height: 1.05; }
+			h1 { font-size: 2.618rem; }
+			h2 { font-size: 1.618rem; }
+			h3 { font-size: 1.272rem; }
+			.small { font-size: 0.786rem; }
+			/* basic form controls dark-mode fallbacks (in case Tailwind classes are not applied) */
+			select, input, textarea, button {
+				background: #FFFFFF;
+				color: #1F2937;
+				border: 1px solid rgba(17,24,39,0.06);
+				padding: .45rem .65rem;
+				border-radius: .75rem;
+			}
+			.dark select, .dark input, .dark textarea, .dark button {
+				background: #111827 !important;
+				color: #F9FAFB !important;
+				border-color: rgba(255,255,255,0.06) !important;
+			}
+		</style>
+
+		<!-- Manage button utility class (use .btn-manage to style Manage links uniformly) -->
+		<style>
+			.btn-manage {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				background: var(--accent);
+				color: #0B1220;
+				padding: .35rem .7rem;
+				border-radius: .55rem;
+				font-size: 0.75rem;
+				font-weight: 600;
+				text-decoration: none;
+				border: 0;
+				box-shadow: none;
+				transition: filter 0.2s ease;
+			}
+
+			.btn-manage:hover, .btn-manage:focus { filter: brightness(0.95); outline: none; }
+
+			.dark .btn-manage { background: #FF7A4C !important; color: #0B1220 !important; }
+
+			/* Fallback for table-cell anchored buttons (ensure consistent padding) */
+			#table td .btn-manage { padding: .25rem .5rem; font-size: 0.75rem; border-radius: .375rem; }
+		</style>
+		<!-- Strong dark-mode overrides (copied from dashboard for consistent dark styling) -->
+		<style>
+			/* Focus badge tokens (used in session/activity rows) */
+			.focus-badge { background: #F3F4F6; color: #111827; }
+			.focus-badge--high { background: #ECFDF5; color: #065F46; }
+			.focus-badge--medium { background: #FFF7ED; color: #7C2D12; }
+			.focus-badge--low { background: #FFF1E6; color: #7C2D12; }
+			.focus-badge--poor { background: #FEE2E2; color: #7F1D1D; }
+
+			/* Dark-mode overrides for badges */
+			.dark .focus-badge { background: rgba(255,255,255,0.04) !important; color: #F9FAFB !important; }
+			.dark .focus-badge--high { background: rgba(16,185,129,0.12) !important; color: #ECFDF5 !important; }
+			.dark .focus-badge--medium { background: rgba(255,159,67,0.10) !important; color: #FFF7ED !important; }
+			.dark .focus-badge--low { background: rgba(255,203,128,0.08) !important; color: #FFF1E6 !important; }
+			.dark .focus-badge--poor { background: rgba(239,68,68,0.10) !important; color: #FEE2E2 !important; }
+
+			/* Table divider and border colors to match dashboard */
+			.divide-gray-200 > * + * { border-top-color: rgba(17,24,39,0.06) !important; }
+			.border-gray-200 { border-color: rgba(17,24,39,0.06) !important; }
+			.dark .divide-gray-200 > * + * { border-top-color: rgba(255,255,255,0.06) !important; }
+			.dark .border-gray-200 { border-color: rgba(255,255,255,0.06) !important; }
+
+			/* High specificity dark-mode map so Tailwind-style "dark:" variants work reliably */
+			/* If .dark is present on <html>, force sensible dark replacements for commonly-used helper classes */
+			.dark, .dark html, .dark body {
+				background-color: #0b1220 !important;
+				color: #F9FAFB !important;
+			}
+			.dark .bg-off-white { background-color: #0F1724 !important; }
+			.dark .bg-white { background-color: #0F1724 !important; }
+			.dark .bg-grey-dark { background-color: #111827 !important; }
+			.dark .bg-grey-darker { background-color: #0B1220 !important; }
+			.dark .text-grey-dark { color: #F9FAFB !important; }
+			.dark .text-gray-500 { color: #9CA3AF !important; }
+			.dark .text-gray-600 { color: #6B7280 !important; }
+			.dark .text-off-white { color: #F9FAFB !important; }
+			.dark .text-orange-punch { color: #FF6B35 !important; }
+			/* Keep orange-accent utility consistent in light mode */
+			.text-orange-punch { color: var(--accent) !important; }
+			.dark .border-gray-200, .dark .border { border-color: rgba(255,255,255,0.06) !important; }
+			.dark .shadow-sm, .dark .shadow-lg { box-shadow: none !important; }
+			.dark .search-attached { background-color:#0f1724 !important; color:#F9FAFB !important; }
+			.dark thead { background: linear-gradient(90deg, #DC2626 0%, #FF6B35 100%) !important; }
+		</style>
+		<style>
+			.gradient-text {
+				background: linear-gradient(135deg, #FF6B35 0%, #DC2626 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+		</style>
+		<style>
+			.domain-stat-grid {
+				display: grid;
+				gap: 1rem;
+				grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+			}
+			.domain-stat-card {
+				background: #FFFFFF;
+				border: 1px solid rgba(17,24,39,0.08);
+				border-radius: 1.1rem;
+				padding: 1rem 1.1rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.35rem;
+			}
+			.dark .domain-stat-card {
+				background: #0F1724 !important;
+				border-color: rgba(255,255,255,0.06) !important;
+			}
+			.domain-stat-card__title {
+				font-size: 0.72rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: #6B7280;
+			}
+			.dark .domain-stat-card__title { color: #9CA3AF; }
+			.domain-stat-card__value {
+				font-size: 1.35rem;
+				font-weight: 600;
+				color: var(--accent);
+			}
+			.dark .domain-stat-card__value { color: #FF9153; }
+		</style>
 	</head>
-	<body>
-		<header>
-			<img src="/icons/128.png" alt="BrowSync" id="logo" />
-			<h1>BrowSync</h1>
+	<body class="bg-off-white dark:bg-grey-darker text-grey-dark dark:text-off-white min-h-screen font-sans antialiased">
+		<!-- Header -->
+		<header class="sticky top-0 z-50 backdrop-blur-lg bg-off-white/90 dark:bg-grey-darker/90">
+			<div class="container mx-auto px-6 py-4">
+				<div class="flex items-center justify-between">
+					<div class="flex items-center gap-4">
+						<img src="/icons/128.png" alt="BrowSync" class="h-11 w-11 rounded-xl shadow-sm" />
+						<div>
+							<p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">BrowSync Insight</p>
+							<h1 class="text-2xl font-semibold text-grey-dark dark:text-off-white">Domain Deep Dive</h1>
+						</div>
+					</div>
+					<div class="flex items-center gap-3">
+						<button id="themeToggle" class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-grey-dark transition hover:border-orange-punch hover:text-orange-punch dark:border-grey-light dark:bg-grey-dark dark:text-off-white dark:hover:border-orange-punch" title="Toggle theme" aria-label="Toggle theme">
+							<svg class="w-6 h-6 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+							</svg>
+							<svg class="w-6 h-6 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+							</svg>
+						</button>
+						<a href="/dashboard.html" class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-grey-dark transition hover:border-orange-punch hover:text-orange-punch dark:border-grey-light dark:bg-grey-dark dark:text-off-white">
+							<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12l7.5-7.5M21 12H3" /></svg>
+							<span>Back to dashboard</span>
+						</a>
+					</div>
+				</div>
+			</div>
 		</header>
-		<main>
-			<div id="domain">
-				<div class="flex">
-					<img src="" alt="" id="domainLogo" />
-					<div>
-                        <div class="flex">
-                            <h1 id="domainName"></h1>
-                            <div class="settings flex">
-                                <h2>Blacklist this domain:</h2>
-                                <select name="blacklist" id="blacklist">
-                                    <option value="no">Never</option>
-                                    <option value="yes">Always</option>
-                                </select>
-                            </div>
-                            <div class="settings flex">
-                                <h2>Set Usage Reminder:</h2>
-                                <select name="usageReminder" id="usageReminder">
-                                    <option value="never">Never</option>
-                                    <option value="30m">30m</option>
-                                    <option value="1h">1h</option>
-                                    <option value="2h">2h</option>
-                                    <option value="4h">4h</option>
-                                </select>
-                            </div>
-                        </div>
-						<div class="flex">
-							<div>
-								<p>Total Time Spent:</p>
-								<h2 id="totalTimeSpent">2h 30m</h2>
+
+		<main class="container mx-auto px-6 py-10">
+			<!-- Domain Header -->
+			<div class="mb-10 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-grey-light dark:bg-grey-dark">
+				<div class="flex items-center gap-4 mb-6">
+					<img src="" alt="Domain Logo" id="domainLogo" class="h-16 w-16 rounded-2xl border border-gray-200 object-cover shadow-sm dark:border-grey-light" />
+					<div class="flex-1">
+						<h1 id="domainName" class="text-3xl font-semibold text-grey-dark dark:text-off-white"></h1>
+						
+						<!-- Settings -->
+						<div class="flex flex-wrap gap-4 mt-4">
+							<div class="flex flex-col">
+								<label for="blacklist" class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Blacklist</label>
+								<select name="blacklist" id="blacklist" 
+										class="mt-1 rounded-xl border border-gray-300 bg-off-white px-3 py-2 text-sm font-medium text-grey-dark focus:outline-none focus:ring-2 focus:ring-orange-punch dark:border-grey-light dark:bg-grey-darker dark:text-off-white">
+									<option value="no">Never</option>
+									<option value="yes">Always</option>
+								</select>
 							</div>
-							<div>
-								<p>Total sessions:</p>
-								<h2 id="totalSessions">10</h2>
-							</div>
-							<div>
-								<p>Active Time:</p>
-								<h2 id="activeTime">1h 30m</h2>
-							</div>
-							<div>
-								<p>Passive Time:</p>
-								<h2 id="passiveTime">1h 30m</h2>
-							</div>
-							<div>
-								<p>Activity Ratio:</p>
-								<h2 id="activityRatio">1.5</h2>
-							</div>
-							<div>
-								<p>Total Distractions:</p>
-								<h2 id="totalDistractions">10</h2>
-							</div>
-							<div>
-								<p>Total Interactions:</p>
-								<h2 id="totalInteractions">20</h2>
+							<div class="flex flex-col">
+								<label for="usageReminder" class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Usage Reminder</label>
+								<select name="usageReminder" id="usageReminder"
+										class="mt-1 rounded-xl border border-gray-300 bg-off-white px-3 py-2 text-sm font-medium text-grey-dark focus:outline-none focus:ring-2 focus:ring-orange-punch dark:border-grey-light dark:bg-grey-darker dark:text-off-white">
+									<option value="never">Never</option>
+									<option value="30m">30 minutes</option>
+									<option value="1h">1 hour</option>
+									<option value="2h">2 hours</option>
+									<option value="4h">4 hours</option>
+								</select>
 							</div>
 						</div>
 					</div>
 				</div>
+
+				<!-- Stats Grid -->
+				<div class="domain-stat-grid">
+					<article class="domain-stat-card">
+						<p class="domain-stat-card__title">Time Spent</p>
+						<h2 id="totalTimeSpent" class="domain-stat-card__value">0m</h2>
+					</article>
+					<article class="domain-stat-card">
+						<p class="domain-stat-card__title">Sessions</p>
+						<h2 id="totalSessions" class="domain-stat-card__value">0</h2>
+					</article>
+					<article class="domain-stat-card">
+						<p class="domain-stat-card__title">Active Time</p>
+						<h2 id="activeTime" class="domain-stat-card__value">0m</h2>
+					</article>
+					<article class="domain-stat-card">
+						<p class="domain-stat-card__title">Passive Time</p>
+						<h2 id="passiveTime" class="domain-stat-card__value">0m</h2>
+					</article>
+					<article class="domain-stat-card">
+						<p class="domain-stat-card__title">Activity</p>
+						<h2 id="activityRatio" class="domain-stat-card__value">0%</h2>
+					</article>
+					<article class="domain-stat-card">
+						<p class="domain-stat-card__title">Distractions</p>
+						<h2 id="totalDistractions" class="domain-stat-card__value">0</h2>
+					</article>
+					<article class="domain-stat-card">
+						<p class="domain-stat-card__title">Interactions</p>
+						<h2 id="totalInteractions" class="domain-stat-card__value">0</h2>
+					</article>
+				</div>
 			</div>
-			<table id="table"></table>
+
+			<!-- Session History Table -->
+			<div class="rounded-3xl border border-gray-200 bg-grey-dark text-off-white shadow-sm dark:border-grey-light dark:bg-grey-darker">
+				<div class="flex items-center justify-between px-6 py-5">
+					<div>
+						<h3 class="text-xl font-semibold text-grey-dark dark:text-off-white">Session History</h3>
+						<p class="text-sm text-gray-500 dark:text-gray-400">Chronological log of your interactions on this domain.</p>
+					</div>
+					<button id="exportSessions" class="hidden items-center gap-2 rounded-xl border border-gray-200 px-3 py-2 text-xs font-semibold text-grey-dark hover:border-orange-punch hover:text-orange-punch dark:border-grey-light dark:text-off-white">Export CSV</button>
+				</div>
+				<div class="overflow-x-auto">
+					<table id="table" class="w-full min-w-[720px]">
+						<thead class="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-600 dark:bg-grey-darker dark:text-gray-300">
+							<tr>
+								<th class="px-6 py-4 text-left">S. No.</th>
+								<th class="px-6 py-4 text-left">Title</th>
+								<th class="px-6 py-4 text-left">URL</th>
+								<th class="px-6 py-4 text-left">Start</th>
+								<th class="px-6 py-4 text-left">Duration</th>
+								<th class="px-6 py-4 text-left">Activity</th>
+								<th class="px-6 py-4 text-left">Stats</th>
+							</tr>
+						</thead>
+						<tbody id="sessionTableBody" class="divide-y divide-gray-200 text-sm dark:divide-grey-light"></tbody>
+					</table>
+				</div>
+			</div>
 		</main>
+
+		<script src="/js/theme.js" defer></script>
+		<script src="/js/dev_loader.js" defer></script>
 		<script src="/js/website.js"></script>
 	</body>
 </html>

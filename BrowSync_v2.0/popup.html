@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>BrowSync - Quick Stats</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+			rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Icons"
+			rel="stylesheet"
+			data-material-icons />
+
+		<link rel="stylesheet" href="/css/popup.css" />
+
+		<script src="/js/theme.js"></script>
+	</head>
+	<body>
+		<div class="popup-wrapper">
+			<header class="popup-header">
+				<img src="/icons/128.png" alt="Site Icon" id="logo" />
+				<h1 id="domain">Loading Domain...</h1>
+				<p>Live snapshot of this domain</p>
+			</header>
+
+			<div class="stats-grid">
+				<article class="stat-card system-stats">
+					<div class="stat-row">
+						<span class="stat-label">Current Session</span>
+						<span id="currentSessionTime" class="stat-value"
+							>0s</span
+						>
+					</div>
+					<div class="stat-row stat-row-secondary">
+						<span class="stat-label">Live Activity</span>
+						<span id="currentActivityRatio" class="stat-value"
+							>0%</span
+						>
+					</div>
+				</article>
+
+				<article class="stat-card">
+					<div class="stat-row">
+						<span class="stat-label">Total Visits</span>
+						<span id="totalVisits" class="stat-value">0</span>
+					</div>
+				</article>
+
+				<article class="stat-card">
+					<div class="stat-row">
+						<span class="stat-label">Total Time Spent</span>
+						<span id="totalTime" class="stat-value">0m</span>
+					</div>
+				</article>
+
+				<article class="stat-card system-stats">
+					<div class="stat-row">
+						<span class="stat-label">Open Tabs</span>
+						<span id="openTabs" class="stat-value">0</span>
+					</div>
+					<div class="stat-row stat-row-secondary">
+						<span class="stat-label">Memory Usage</span>
+						<span id="memoryUsage" class="stat-value"
+							>Loading...</span
+						>
+					</div>
+				</article>
+			</div>
+
+			<a
+				href="/dashboard.html"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="popup-launch">
+				<span>Launch Advanced Dashboard</span>
+				<svg fill="none" viewBox="0 0 24 24" aria-hidden="true">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M17 8l4 4m0 0l-4 4m4-4H3" />
+				</svg>
+			</a>
+		</div>
+
+		<script src="/js/popup.js" defer></script>
+	</body>
+</html>

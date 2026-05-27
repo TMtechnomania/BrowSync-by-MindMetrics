@@ -1,109 +1,171 @@
-
 # BrowSync
 
-**BrowSync**  is a powerful browser extension designed to help users manage their time effectively. By tracking website usage, offering a comprehensive productivity dashboard, and sending intelligent break reminders, it empowers users to stay focused and optimize their online habits. With the added bonus of AI-driven insights, BrowSync provides personalized recommendations and analysis, helping users boost productivity, maintain balance, and make the most of their time online.
-## About The Project
+**BrowSync** is a modern browser extension designed to help users manage their time effectively and boost productivity. Track website usage, view comprehensive analytics with real-time system stats, and receive intelligent break reminders - all with a beautiful, modern interface.
 
-BrowSync is perfect for anyone who wants to take control of their time online. Whether you’re a student, professional, or anyone who spends significant time on the web, this extension helps you stay productive by:
+## ✨ Features
 
-- Tracking time spent on different websites.
-- Encouraging mindful breaks.
-- Giving you insights into your browsing habits for better time management.
+### 📊 Real-Time Analytics
+- **Live System Stats**: Monitor open tabs count and memory usage in real-time
+- **Session Tracking**: Track time spent on each website with active/passive time breakdown
+- **Activity Monitoring**: See your engagement level with activity ratio percentages
+- **Click & Distraction Tracking**: Monitor interactions and tab switches
 
-# Features
-- **Website Tracking**:- Tracks time spent on websites to help identify distractions and improve focus.
-- **Productivity Dashboard**:-  Displays detailed analytics on browsing activity and productivity trends.
-- **Smart Break Reminders**:- Suggests optimal break times to prevent burnout and improve focus.
-- **AI-Powered Productivity Insights**:- Provides personalized recommendations and insights to boost efficiency.
-- **Customizable Settings**:- Allows users to tailor tracking and break preferences to their workflow.
+### 🎯 Productivity Tools
+- **Smart Break Reminders**: Customizable usage reminders (30m, 1h, 2h, 4h)
+- **Website Blacklisting**: Block distracting sites to stay focused
+- **Local AI Insights**: Get personalized productivity recommendations without external APIs
+- **Session History**: Detailed breakdown of all your browsing sessions
 
+### 🎨 Modern UI
+- Built with **Tailwind CSS** for a sleek, responsive design
+- Dark theme optimized for extended use
+- Smooth animations and transitions
+- Intuitive dashboard with data visualizations
 
-# Development
+### 🔒 Privacy-First
+- **100% Local Processing**: All data stored and analyzed locally
+- **No External APIs**: No data sent to external servers
+- **Chrome Webstore Compliant**: Follows all extension policies
+- **Manifest V3**: Uses the latest extension standards
 
-## Frontend
-- **GitHub Repository**: 
-  - BrowSync Frontend: `https://github.com/TMtechnomania/BrowSync-by-MindMetrics`
-- **Permissions Justification**:-
-```sh
- ## Manifest Configuration
-json
-"background": {
-    "service_worker": "/js/background.js"
-},
-"content_scripts": [
-    {
-        "matches": ["<all_urls>"],
-        "js": ["/js/content.js"],
-        "run_at": "document_start"
-    }
-],
-"host_permissions": ["<all_urls>"],
-"permissions": [
-    "alarms",
-    "notifications",
-    "storage",
-    "tabs"
-]
-   ```
-- Notifications:- Sends alerts when users exceed set usage time for a domain.
-- Storage:- Maintains collected data across different scripts and the dashboard.
-- Tabs:- Tracks tab creation, updates, and exchanges session data with content scripts.
+## 🚀 Installation
 
-- **Folder Structure**:
-  - /js/background.js: Handles background tasks, notifications, and data storage.
-  - /js/content.js: Monitors website activity and sends data to background scripts.
-  - /popup/: Contains UI elements for user interaction.
-  - /dashboard/: Displays top 5 domains and other productivity insights.
-  - website.html: Shows domain-specific data and blacklist settings.
-- **Data Collection & Processing**:
-  - Content script sends data to the background script when a website unloads using beforeunload listener.
-  - Checks domain settings upon URL load; redirects if blacklisted.
-  - Sends a message to background script when usage time is exceeded, triggering a notification.
-- **Data Representation**:
-  - Dashboard loads top 5 visited domains and additional productivity analytics.
+### From Source
 
-## Backend
-- **GitHub Repository**: 
-  - BrowSync Backend: `https://github.com/vishal1mittal/BrowSyncBackend`
-- **Technologies**:-
-  - Node.js and Express for server-side functionality.
-  - Implements rate limiting to prevent service abuse.
-  - Uses JWT (JSON Web Tokens) for secure authentication.
-  - Logs requests for optimization and analytics.
-  - Integrates AI models like Google Gemini for data processing.
-- **Key Features**:
-  - Suggests recommendations and productivity scores based on user activity.
-  - Detects behavioral anomalies and provides contextual summaries to improve productivity.
+1. Clone this repository:
+```bash
+git clone https://github.com/TMtechnomania/BrowSync-by-MindMetrics.git
+```
 
+2. Open your browser and navigate to `chrome://extensions/`
 
-### Installation
+3. Enable `"Developer Mode"` (toggle in the top-right corner)
 
-To install and use BrowSync on your browser, follow these steps:
+4. Click `"Load unpacked"` and select the extension folder
 
-1. Download this extension:
-```sh
-   https://raw.githubusercontent.com/TMtechnomania/BrowSync-by-MindMetrics/refs/heads/main/BrowSync.zip
-   ```
-2. Open your browser and navigate to `chrome://extensions/`.
-3. Enable `"Developer Mode"` (toggle in the top-right corner).
-4. Click `"Load unpacked"` and select the extension folder inside the cloned repository.
+## 📸 Screenshots
 
-<h2 id="technologies">💻 Technologies</h2>
+### Dashboard
+Modern, comprehensive dashboard showing:
+- Total sessions and domains tracked
+- Real-time tab count and memory usage
+- Top websites by time and visits
+- Productivity summary with local AI insights
+- Interactive charts and graphs
 
-- **Frontend**: 
-  - HTML & CSS (UI Design)
-  - JavaScript (Frontend & Logic) 
-  - Chrome Extension APIs (Tracking & Storage)
-- **Backend**: 
-  - Node.js & Express (Backend)
-  - JWT for secure authentication
-  - Google Gemini AI (Data Processing & Analysis)
+### Popup
+Quick view showing:
+- Current domain stats
+- Total visits and time spent
+- Activity ratio
+- Live system stats (tabs & memory)
 
-## Authors
+### Domain Details
+Detailed view per domain:
+- Session history table
+- Time breakdown (active/passive)
+- Blacklist and reminder settings
+- Click and distraction analytics
 
-### TEAM NAME :- MindMetrics
-- KARTIKEY TIWARI - @tiwarikartik3002
-- VISHAL MITTAL - @.vishalmittal
-- YASH ROHILLA - @thanos07890
-- SNEHIT PANDEY - @dark0b0i
+## 🛠️ Technical Details
 
+### Permissions Used
+- **`tabs`**: Track browsing activity and manage tab information
+- **`storage`**: Save browsing data locally across sessions
+- **`notifications`**: Send usage reminders and alerts
+- **`alarms`**: Schedule periodic tasks
+- **`system.memory`**: Display real-time memory usage
+- **`<all_urls>`**: Content script injection for tracking
+
+### Architecture
+```
+├── manifest.json          # Extension configuration (Manifest V3)
+├── popup.html            # Extension popup interface
+├── dashboard.html        # Main analytics dashboard
+├── website.html          # Domain-specific details page
+├── js/
+│   ├── background.js     # Service worker (data management)
+│   ├── content.js        # Content script (page tracking)
+│   ├── popup.js          # Popup logic with real-time stats
+│   ├── dashboard.js      # Dashboard with local AI insights
+│   └── website.js        # Domain details logic
+└── icons/                # Extension icons
+```
+
+### Data Structure
+```javascript
+domainDB = {
+  "example.com": {
+    clicks: 150,
+    totalLife: 3600,        // Total seconds
+    activeLife: 2400,       // Active seconds
+    passiveLife: 1200,      // Passive seconds
+    distractions: 5,
+    urlVisited: [
+      {
+        domain: "example.com",
+        url: "https://example.com/page",
+        title: "Page Title",
+        clicks: 10,
+        sessionDuration: 300,
+        activeSession: 200,
+        passiveSession: 100,
+        distractions: 1,
+        sessionStart: 1234567890,
+        sessionEnd: 1234568190
+      }
+    ]
+  }
+}
+```
+
+## 🎯 Key Improvements (v2.0)
+
+### What's New
+✅ **Modern UI**: Complete redesign with Tailwind CSS  
+✅ **Real-time Stats**: Live tab count and memory monitoring  
+✅ **Local AI**: Productivity insights without external APIs  
+✅ **Better Performance**: Optimized data handling and storage  
+✅ **Enhanced UX**: Smoother interactions and animations  
+✅ **Search & Filter**: Find domains quickly in dashboard  
+✅ **Improved Notifications**: Beautiful in-page reminders  
+
+### What Was Removed
+❌ **External AI API**: No longer depends on unavailable backend  
+❌ **Token Authentication**: Removed JWT-based auth system  
+❌ **Network Requests**: All processing now happens locally  
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📜 License
+
+This project is open source and available under the MIT License.
+
+## 👥 Team MindMetrics
+
+- **KARTIKEY TIWARI** - [@tiwarikartik3002](https://github.com/tiwarikartik3002)
+- **VISHAL MITTAL** - [@vishal1mittal](https://github.com/vishal1mittal)
+- **YASH ROHILLA** - [@thanos07890](https://github.com/thanos07890)
+- **SNEHIT PANDEY** - [@dark0b0i](https://github.com/dark0b0i)
+
+## 🔗 Links
+
+- [GitHub Repository](https://github.com/TMtechnomania/BrowSync-by-MindMetrics)
+- [Report Issues](https://github.com/TMtechnomania/BrowSync-by-MindMetrics/issues)
+- [Chrome Web Store](#) _(Coming Soon)_
+
+## 📧 Support
+
+For support, email us or open an issue on GitHub.
+
+---
+
+Made with ❤️ by Team MindMetrics

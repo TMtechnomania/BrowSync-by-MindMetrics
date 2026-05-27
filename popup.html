@@ -3,31 +3,167 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Popup</title>
-		<link rel="stylesheet" href="/css/popup.css" />
+		<title>BrowSync - Quick Stats</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" data-material-icons />
+	<script src="/js/tailwind-config.js"></script>
+	<script src="/js/3.4.17.js"></script>
+		<style>
+			:root{ --accent: #FF6B35; --accent-2: #DC2626; --accent-start: var(--accent); --accent-end: var(--accent-2); --accent-dark-start: #B33E1E; --accent-dark-end: #7A1513; }
+			body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+			/* popup button fallback for dark/light modes */
+			.popup-launch { background: linear-gradient(90deg, var(--accent-start) 0%, var(--accent-end) 100%) !important; color: #FFFFFF !important; border: none; border-radius: 9999px; padding: 6px 12px; font-weight: 600; }
+			.popup-launch:hover { filter: brightness(0.95); }
+			.btn-primary { background: linear-gradient(90deg, var(--accent-start) 0%, var(--accent-end) 100%); color: white; border-radius: 10px; padding: .5rem 1rem; }
+			.dark .popup-launch, .dark .btn-primary { background: linear-gradient(90deg, var(--accent-dark-start) 0%, var(--accent-dark-end) 100%) !important; }
+			.gradient-text-strong { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+			/* remove box-shadows for a flatter UI */
+			.rounded-2xl, .rounded-3xl { box-shadow: none !important; border-color: rgba(17,24,39,0.06); }
+			.border { border-color: rgba(17,24,39,0.06) !important; }
+			.shadow-sm, .shadow-lg { box-shadow: none !important; }
+			/* table row hover accent (popup tables/lists if any) */
+			#list tbody tr:hover,
+			table#table tbody tr:hover,
+			#domainTableBody tr:hover,
+			#sessionTableBody tr:hover,
+			.table-row-hover:hover {
+				background-color: rgba(255,107,53,0.06) !important;
+			}
+			.dark #list tbody tr:hover,
+			.dark table#table tbody tr:hover,
+			.dark #domainTableBody tr:hover,
+			.dark #sessionTableBody tr:hover,
+			.dark .table-row-hover:hover {
+				background-color: rgba(220,38,38,0.08) !important;
+			}
+
+			/* punchy table header row (full-width gradient) */
+			table thead,
+			table thead tr {
+				background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%) !important;
+			}
+			table thead th {
+				background: transparent !important;
+				color: #1F2937 !important; /* dark gray text on orange */
+				border-bottom: none !important;
+			}
+			.dark table thead,
+			.dark table thead tr {
+				background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 100%) !important;
+			}
+			.dark table thead th {
+				background: transparent !important;
+				color: #F9FAFB !important; /* off-white in dark mode */
+			}
+			:root { font-size: 16px; }
+			body { font-size: 1rem; }
+			h1, h2, h3 { letter-spacing: -0.01em; line-height: 1.05; }
+			h1 { font-size: 2.618rem; }
+			h2 { font-size: 1.618rem; }
+			h3 { font-size: 1.272rem; }
+			.small { font-size: 0.786rem; }
+
+			/* basic form controls dark-mode fallbacks (in case Tailwind classes are not applied) */
+			select, input, textarea, button {
+				background: #FFFFFF;
+				color: #1F2937;
+				border: 1px solid rgba(17,24,39,0.06);
+				padding: .45rem .65rem;
+				border-radius: .75rem;
+			}
+			.dark select, .dark input, .dark textarea, .dark button {
+				background: #111827 !important;
+				color: #F9FAFB !important;
+				border-color: rgba(255,255,255,0.06) !important;
+			}
+		</style>
+		<style>
+			.gradient-orange-crimson {
+				background: linear-gradient(135deg, #FF6B35 0%, #DC2626 100%);
+			}
+		</style>
+		<!-- Strong dark-mode overrides (copied from dashboard for high-specificity fallbacks) -->
+		<style>
+			/* High specificity dark-mode map so Tailwind-style "dark:" variants work reliably */
+			/* If .dark is present on <html>, force sensible dark replacements for commonly-used helper classes */
+			.dark, .dark html, .dark body {
+				background-color: #0b1220 !important;
+				color: #F9FAFB !important;
+			}
+			.dark .bg-off-white { background-color: #0F1724 !important; }
+			.dark .bg-white { background-color: #0F1724 !important; }
+			.dark .bg-grey-dark { background-color: #111827 !important; }
+			.dark .bg-grey-darker { background-color: #0B1220 !important; }
+			.dark .text-grey-dark { color: #F9FAFB !important; }
+			.dark .text-gray-500 { color: #9CA3AF !important; }
+			.dark .text-gray-600 { color: #6B7280 !important; }
+			.dark .text-off-white { color: #F9FAFB !important; }
+			.dark .text-orange-punch { color: #FF6B35 !important; }
+			/* Ensure orange-accent utility is visible in light mode too */
+			.text-orange-punch { color: var(--accent) !important; }
+			.dark .border-gray-200, .dark .border { border-color: rgba(255,255,255,0.06) !important; }
+			.dark .shadow-sm, .dark .shadow-lg { box-shadow: none !important; }
+			.dark .search-attached { background-color:#0f1724 !important; color:#F9FAFB !important; }
+			.dark thead { background: linear-gradient(90deg, #DC2626 0%, #FF6B35 100%) !important; }
+		</style>
 	</head>
-	<body>
-		<section>
-				<img src="" alt="" id="logo" />
-				<h1 id="domain"></h1>
-				<div class="flex">
-					<div>
-						<h2>Total past visits:</h2>
-						<p id="totalVisits"></p>
+	<body class="bg-off-white dark:bg-grey-darker text-grey-dark dark:text-off-white w-80 min-h-[420px] font-sans antialiased">
+		<div class="p-4">
+			<!-- Header -->
+			<div class="flex flex-col items-center mb-4 pb-4">
+				<img src="" alt="Site Icon" id="logo" class="mb-3 h-12 w-12 rounded-xl border border-gray-200 object-cover shadow-sm dark:border-grey-light" />
+				<h1 id="domain" class="w-full truncate text-center text-base font-semibold text-grey-dark dark:text-off-white"></h1>
+				<p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Live snapshot of this domain</p>
+			</div>
+
+			<!-- Stats Grid -->
+			<div class="mb-4 space-y-3">
+				<div class="rounded-xl border border-gray-200 bg-white p-3 shadow-sm dark:border-grey-light dark:bg-grey-dark">
+					<div class="flex justify-between items-center">
+						<span class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Total Visits</span>
+						<span id="totalVisits" class="text-lg font-semibold text-grey-dark dark:text-off-white">0</span>
 					</div>
-					<div>
-						<h2>Total time spent:</h2>
-						<p id="totalTime"></p>
-					</div>
-                    <div>
-                        <h2>Activity ratio:</h2>
-                        <p id="activityRatio"></p>
-                    </div>
 				</div>
+				
+				<div class="rounded-xl border border-gray-200 bg-white p-3 shadow-sm dark:border-grey-light dark:bg-grey-dark">
+					<div class="flex justify-between items-center">
+						<span class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Time Spent</span>
+						<span id="totalTime" class="text-lg font-semibold text-grey-dark dark:text-off-white">0m</span>
+					</div>
+				</div>
+				
+				<div class="rounded-xl border border-gray-200 bg-white p-3 shadow-sm dark:border-grey-light dark:bg-grey-dark">
+					<div class="flex justify-between items-center">
+						<span class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Activity Ratio</span>
+						<span id="activityRatio" class="text-lg font-semibold text-grey-dark dark:text-off-white">0%</span>
+					</div>
+				</div>
+
+				<!-- System Stats -->
+				<div class="rounded-xl border border-gray-200 bg-gradient-to-r from-orange-punch/10 to-crimson/10 p-3 shadow-sm dark:border-orange-punch/30 dark:bg-orange-punch/10">
+					<div class="flex justify-between items-center mb-2">
+						<span class="text-xs font-semibold uppercase tracking-wide text-grey-dark dark:text-off-white">Open Tabs</span>
+						<span id="openTabs" class="text-lg font-semibold text-grey-dark dark:text-off-white">0</span>
+					</div>
+					<div class="flex justify-between items-center text-[11px] text-grey-dark/80 dark:text-off-white/80">
+						<span>Memory Usage</span>
+						<span id="memoryUsage">Loading...</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Dashboard Button -->
 			<a href="/dashboard.html" target="_blank" rel="noopener noreferrer"
-				>Check Dashboard</a
-			>
-		</section>
+				class="mt-4 flex w-full items-center justify-center gap-2 px-4 py-2 rounded-2xl popup-launch transition">
+				<span>Launch Advanced Dashboard</span>
+				<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+				</svg>
+			</a>
+		</div>
+		<script src="/js/theme.js" defer></script>
 		<script src="/js/popup.js"></script>
 	</body>
 </html>

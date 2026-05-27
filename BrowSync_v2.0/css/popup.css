@@ -1,0 +1,209 @@
+/* /css/popup.css */
+/* 1. Root Variables & Box-Sizing Fix */
+:root {
+	--accent-orange: #ff6b35;
+	--accent-crimson: #dc2626;
+	--font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+		Roboto, sans-serif;
+	/* Light Theme */
+	--bg-color: #f9fafb;
+	--card-bg: #ffffff;
+	--text-primary: #111827;
+	--text-secondary: #4b5563;
+	--border-color: #e5e7eb;
+	/* Dark Theme */
+	--dark-bg: #0b1220;
+	--dark-card-bg: #0f1724;
+	--dark-text-primary: #f9fafb;
+	--dark-text-secondary: #9ca3af;
+	--dark-border: rgba(255, 255, 255, 0.08);
+}
+/* FIX: Apply border-box to all elements. 
+  This prevents padding from being added to 100% widths,
+  fixing the button overflow bug.
+*/
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+/* 2. Base & Dark Mode */
+body {
+	font-family: var(--font-family);
+	background-color: var(--bg-color);
+	color: var(--text-primary);
+	width: 320px; /* w-80 */
+	min-height: 420px;
+	margin: 0;
+	padding: 16px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+html.dark body {
+	background-color: var(--dark-bg);
+	color: var(--dark-text-primary);
+}
+/* 3. Popup Wrapper */
+.popup-wrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 388px; /* 420px - 32px padding */
+}
+/* 4. Header Section */
+.popup-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 16px;
+	padding-bottom: 16px;
+}
+#logo {
+	width: 48px;
+	height: 48px;
+	border-radius: 12px;
+	border: 1px solid var(--border-color);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	margin-bottom: 12px;
+	object-fit: cover;
+}
+html.dark #logo {
+	border-color: var(--dark-border);
+}
+#domain {
+	font-size: 1rem; /* 16px */
+	font-weight: 600;
+	width: 100%;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.popup-header p {
+	margin: 4px 0 0;
+	font-size: 0.75rem; /* 12px */
+	color: var(--text-secondary);
+}
+html.dark .popup-header p {
+	color: var(--dark-text-secondary);
+}
+/* 5. Stats Grid (Card UI) */
+.stats-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 10px;
+	margin-bottom: 16px;
+}
+.stat-card {
+	background-color: var(--card-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 12px;
+	padding: 12px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+html.dark .stat-card {
+	background-color: var(--dark-card-bg);
+	border-color: var(--dark-border);
+}
+.stat-card .stat-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.stat-card .stat-label {
+	font-size: 0.75rem; /* 12px */
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var(--text-secondary);
+}
+.stat-card .stat-value {
+	font-size: 1.125rem; /* 18px */
+	font-weight: 600;
+	color: var(--text-primary);
+}
+html.dark .stat-card .stat-value {
+	color: var(--dark-text-primary);
+}
+/* System Stats Card (Gradient) */
+/* We reuse this style for LIVE stats */
+.stat-card.system-stats {
+	background: linear-gradient(
+		135deg,
+		rgba(255, 107, 53, 0.1),
+		rgba(220, 38, 38, 0.1)
+	);
+	border-color: rgba(255, 107, 53, 0.3);
+}
+html.dark .stat-card.system-stats {
+	background: linear-gradient(
+		135deg,
+		rgba(255, 107, 53, 0.12),
+		rgba(220, 38, 38, 0.15)
+	);
+	border-color: rgba(255, 107, 53, 0.4);
+}
+.stat-card.system-stats .stat-row:first-child .stat-label {
+	color: var(--text-primary);
+	font-weight: 600;
+}
+.stat-card.system-stats .stat-row:first-child .stat-value {
+	color: var(--text-primary);
+}
+html.dark .stat-card.system-stats .stat-row:first-child .stat-label,
+html.dark .stat-card.system-stats .stat-row:first-child .stat-value {
+	color: var(--dark-text-primary);
+}
+.stat-card .stat-row-secondary {
+	margin-top: 8px;
+}
+.stat-card .stat-row-secondary .stat-label,
+.stat-card .stat-row-secondary .stat-value {
+	font-size: 0.6875rem; /* 11px */
+	font-weight: 400;
+	text-transform: none;
+	letter-spacing: 0;
+	color: var(--text-secondary);
+}
+.stat-card .stat-row-secondary .stat-value {
+	font-weight: 500;
+	color: var(--text-primary);
+}
+/* Dark mode overrides for secondary row */
+html.dark .stat-card .stat-row-secondary .stat-label {
+	color: var(--dark-text-secondary);
+}
+html.dark .stat-card .stat-row-secondary .stat-value {
+	color: var(--dark-text-primary);
+}
+/* 6. Launch Button */
+.popup-launch {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	padding: 10px 16px;
+	margin-top: auto; /* Pushes button to the bottom */
+	font-size: 0.875rem; /* 14px */
+	font-weight: 600;
+	color: #ffffff;
+	text-decoration: none;
+	border: none;
+	border-radius: 14px;
+	background: linear-gradient(
+		135deg,
+		var(--accent-orange) 0%,
+		var(--accent-crimson) 100%
+	);
+	cursor: pointer;
+	transition: filter 150ms ease;
+}
+.popup-launch:hover {
+	filter: brightness(1.1);
+}
+.popup-launch svg {
+	width: 16px;
+	height: 16px;
+	stroke: currentColor;
+	stroke-width: 2;
+}

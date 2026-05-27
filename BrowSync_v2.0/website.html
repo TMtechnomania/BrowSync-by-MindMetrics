@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Domain Details | BrowSync</title>
+		<link rel="shortcut icon" href="/icons/128.png" type="image/x-icon" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+			rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Icons"
+			rel="stylesheet"
+			data-material-icons />
+		<link rel="stylesheet" href="/css/website.css" />
+		<script src="/js/theme.js"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="container">
+				<div class="brand">
+					<img
+						src="/icons/128.png"
+						alt="BrowSync"
+						class="brand-logo" />
+					<div>
+						<p class="brand-subtitle">BrowSync Insight</p>
+						<h1 class="brand-title">Domain Deep Dive</h1>
+					</div>
+				</div>
+				<div class="header-actions">
+					<button
+						id="themeToggle"
+						class="icon-btn"
+						title="Toggle theme">
+						<span class="material-icons icon-sun">light_mode</span>
+						<span class="material-icons icon-moon">dark_mode</span>
+					</button>
+					<a href="/dashboard.html" class="btn-secondary">
+						<span class="material-icons">arrow_back</span>
+						<span>Back to dashboard</span>
+					</a>
+				</div>
+			</div>
+		</header>
+		<main class="container main-content">
+			<section class="card domain-header-card">
+				<div class="domain-info">
+					<img
+						src="/icons/128.png"
+						alt="Domain Logo"
+						id="domainLogo"
+						class="domain-logo" />
+					<div class="domain-details">
+						<h1 id="domainName" class="domain-name-title">
+							Loading...
+						</h1>
+						<div class="domain-settings">
+							<div class="setting-item">
+								<label for="blacklist" class="setting-label"
+									>Block Site</label
+								>
+								<select
+									name="blacklist"
+									id="blacklist"
+									class="control-select">
+									<option value="no">Never Block</option>
+									<option value="yes">Always Block</option>
+								</select>
+							</div>
+							<div class="setting-item">
+								<label for="usageReminder" class="setting-label"
+									>Usage Reminder</label
+								>
+								<select
+									name="usageReminder"
+									id="usageReminder"
+									class="control-select">
+									<option value="never">Never</option>
+									<option value="30m">Every 30 mins</option>
+									<option value="1h">Every 1 hour</option>
+									<option value="2h">Every 2 hours</option>
+									<option value="4h">Every 4 hours</option>
+								</select>
+							</div>
+							<div class="setting-item">
+								<label
+									for="categoryOverride"
+									class="setting-label"
+									>Assign Category</label
+								>
+								<select
+									name="categoryOverride"
+									id="categoryOverride"
+									class="control-select">
+									<option value="auto">Auto-detect</option>
+									<option value="productivity">
+										Productivity
+									</option>
+									<option value="entertainment">
+										Entertainment
+									</option>
+									<option value="other">Other</option>
+									<option value="unknown">Unassigned</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="domain-stat-grid">
+					<article class="stat-item">
+						<p class="stat-label">Total Time Spent</p>
+						<h2 id="totalTimeSpent" class="stat-value">0s</h2>
+					</article>
+					<article class="stat-item">
+						<p class="stat-label">Total Visits</p>
+						<h2 id="totalVisits" class="stat-value">0</h2>
+					</article>
+					<article class="stat-item">
+						<p class="stat-label">Total Active Time</p>
+						<h2 id="activeTime" class="stat-value">0s</h2>
+					</article>
+					<article class="stat-item">
+						<p class="stat-label">Avg. Activity</p>
+						<h2 id="activityRatio" class="stat-value">0%</h2>
+					</article>
+					<article class="stat-item">
+						<p class="stat-label">Total Clicks</p>
+						<h2 id="totalClicks" class="stat-value">0</h2>
+					</article>
+					<article class="stat-item">
+						<p class="stat-label">Total Tab Switches</p>
+						<h2 id="totalTabSwitches" class="stat-value">0</h2>
+					</article>
+					<article class="stat-item">
+						<p class="stat-label">Last Visit</p>
+						<h2 id="lastVisit" class="stat-value">—</h2>
+					</article>
+				</div>
+			</section>
+			<section class="card session-history-card">
+				<div class="card-header">
+					<h3 class="card-title">
+						Recent Session History (Last 30 Days)
+					</h3>
+				</div>
+				<div class="table-wrapper">
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Page Title</th>
+								<th>URL</th>
+								<th>Started</th>
+								<th>Duration</th>
+								<th>Active</th>
+								<th>Activity %</th>
+								<th>Clicks</th>
+								<th>Tab Switches</th>
+							</tr>
+						</thead>
+						<tbody id="sessionTableBody">
+							<tr>
+								<td colspan="9" class="table-empty-state">
+									Loading sessions...
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</main>
+		<script src="/js/website.js" defer></script>
+	</body>
+</html>

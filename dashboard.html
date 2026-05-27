@@ -1,55 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Dashboard | BrowSync</title>
-		<link rel="stylesheet" href="/css/dashboard.css" />
-		<link rel="shortcut icon" href="/icons/128.png" type="image/x-icon" />
-	</head>
-	<body>
-		<header>
-			<img src="/icons/128.png" alt="BrowSync" id="logo" />
-			<h1>BrowSync</h1>
-		</header>
-		<main>
-			<p>Sessions over time:</p>
-			<h1 id="sessionsCount">283 Sessions</h1>
-			<!-- long dashboard panel with all analytics -->
-			<div id="panel" class="flex">
-				<div>
-					<p>Total Time Spent:</p>
-					<h2 id="totalTimeSpent">2h 30m</h2>
-				</div>
-				<div>
-					<p>Most Visited Site:</p>
-					<img id="mostVisitedSite"></img>
-				</div>
-				<div>
-					<p>Least Visited Site:</p>
-					<img id="leastVisitedSite"></img>
-				</div>
-				<div>
-					<p>Total Distractions:</p>
-					<h2 id="totalDistractions">10</h2>
-				</div>
-				<div>
-					<p>Total Interactions:</p>
-					<h2 id="totalInteractions">20</h2>
-				</div>
-			</div>
-			<section class="graphs3">
-				<div>
-					<p>Top Sites based on Time spent:</p>
-					<ol id="top5List" class="graph"></ol>
-				</div>
-				<div>
-					<p>Top Sites based on Visits:</p>
-					<ol id="top5Visits" class="graph"></ol>
-				</div>
-			</section>
-            <table id="list"></table>
-		</main>
-		<script src="/js/dashboard.js"></script>
-	</body>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | BrowSync</title>
+    <link rel="shortcut icon" href="/icons/128.png" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" data-material-icons />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="brand">
+                    <img src="/icons/128.png" alt="BrowSync" class="brand-logo" />
+                    <div class="brand-text">
+                        <span class="brand-subtitle">BrowSync</span>
+                        <h1 class="brand-title">Productivity Dashboard</h1>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="themeToggle" class="icon-btn" title="Toggle theme">
+                        <svg class="icon-sun" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                        </svg>
+                        <svg class="icon-moon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                    <button id="refreshBtn" class="btn-primary">
+                        <span>Refresh</span>
+                        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v6h6M20 20v-6h-6M5 19a9 9 0 0114-7.5M19 5a9 9 0 01-14 7.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            
+            <!-- Section 1: Quick Stats Overview -->
+            <section class="section">
+                <h2 class="section-title">Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-primary">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-content">
+                            <span class="stat-label">Status</span>
+                            <span id="productivityBadge" class="stat-value-lg">Tracking in progress…</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <span class="stat-label">Total Sessions</span>
+                            <span id="sessionsTotal" class="stat-value">Loading...</span>
+                            <span id="sessionsSub" class="stat-subtitle">Calculating...</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <span class="stat-label">Total Time Tracked</span>
+                            <span id="totalTimeSpent" class="stat-value">0h 0m</span>
+                            <span class="stat-subtitle">Lifetime</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <span class="stat-label">Open Tabs</span>
+                            <span id="openTabsCount" class="stat-value">0</span>
+                            <span class="stat-subtitle">Active now</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Today's Activity -->
+            <section class="section">
+                <h2 class="section-title">Today's Activity</h2>
+                <div class="quick-metrics">
+                    <div class="metric-item">
+                        <span class="metric-label">Memory Usage</span>
+                        <span id="memoryUsageDisplay" class="metric-value">0 MB</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Interactions</span>
+                        <span id="totalInteractions" class="metric-value">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Distractions</span>
+                        <span id="totalDistractions" class="metric-value">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Productivity Insights -->
+            <section class="section">
+                <h2 class="section-title">Productivity Insights</h2>
+                <div class="insight-card">
+                    <p class="insight-subtitle">Smart insights derived from your browsing behavior</p>
+                    <div id="productivitySummary" class="insight-content">
+                        <p>Analyzing your browsing patterns...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Usage Analytics -->
+            <section class="section">
+                <h2 class="section-title">Usage Analytics</h2>
+                <div class="analytics-controls">
+                    <label for="bounceThresholdSelect" class="control-label">
+                        Bounce threshold
+                    </label>
+                    <select id="bounceThresholdSelect" class="control-select">
+                        <option value="10">10s</option>
+                        <option value="30">30s</option>
+                        <option value="60">60s</option>
+                        <option value="120">2m</option>
+                        <option value="300">5m</option>
+                    </select>
+                    <span id="bounceSaved" class="save-indicator">Saved</span>
+                </div>
+                <div id="derivedMetrics"></div>
+            </section>
+
+            <!-- Section 5: Top Sites -->
+            <section class="section">
+                <h2 class="section-title">Top Sites</h2>
+                <div class="top-sites-grid">
+                    <div class="top-sites-card">
+                        <div class="card-header">
+                            <h3 class="card-title">By Time Spent</h3>
+                            <span class="card-badge">Duration</span>
+                        </div>
+                        <div id="top5List" class="top-sites-list"></div>
+                    </div>
+                    <div class="top-sites-card">
+                        <div class="card-header">
+                            <h3 class="card-title">By Visits</h3>
+                            <span class="card-badge">Frequency</span>
+                        </div>
+                        <div id="top5Visits" class="top-sites-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: All Domains -->
+            <section class="section">
+                <h2 class="section-title">All Domains</h2>
+                <div class="table-controls">
+                    <div class="search-wrapper">
+                        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Search domains..." class="search-input" />
+                    </div>
+                    <div class="sort-controls">
+                        <label for="sortSelect" class="control-label">Sort by</label>
+                        <select id="sortSelect" class="control-select">
+                            <option value="alphabetical" selected>Alphabetical</option>
+                            <option value="time">Total time</option>
+                            <option value="visits">Visits</option>
+                            <option value="activity">Activity ratio</option>
+                            <option value="distractions">Distractions</option>
+                        </select>
+                        <button type="button" id="sortResetBtn" class="btn-ghost">
+                            <svg class="icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v6h6M20 20v-6h-6M5 19a9 9 0 0114-7.5M19 5a9 9 0 01-14 7.5" />
+                            </svg>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Domain</th>
+                                <th>Visits</th>
+                                <th>Total Time</th>
+                                <th>Active</th>
+                                <th>Passive</th>
+                                <th>Distractions</th>
+                                <th>Interactions</th>
+                                <th>Focus</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domainTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/dashboard.js"></script>
+</body>
 </html>

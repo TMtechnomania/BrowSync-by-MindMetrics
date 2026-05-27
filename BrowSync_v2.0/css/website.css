@@ -1,0 +1,425 @@
+/* /css/website.css */
+/* 1. Root Variables & Reset (Same as dashboard) */
+:root {
+	--accent-orange: #ff6b35;
+	--accent-crimson: #dc2626;
+	--font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+		Roboto, sans-serif;
+	/* Light Theme */
+	--bg-color: #f8f9fa;
+	--card-bg: #ffffff;
+	--text-primary: #181c20;
+	--text-secondary: #5a6470;
+	--border-color: #dee2e6;
+	/* Dark Theme */
+	--dark-bg: #111827; /* Body background */
+	--dark-element-bg: #0b1220; /* Darker background for cards/elements */
+	--dark-text-primary: #e5e7eb;
+	--dark-text-secondary: #9ca3af;
+	--dark-border: #374151;
+}
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+body {
+	font-family: var(--font-family);
+	background-color: var(--bg-color);
+	color: var(--text-primary);
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-size: 14px;
+	min-height: 100vh;
+}
+html.dark body {
+	background-color: var(--dark-bg);
+	color: var(--dark-text-primary);
+}
+.container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+/* 2. Header (Copied/Adapted from dashboard) */
+.header {
+	background-color: var(--bg-color);
+	border-bottom: 1px solid var(--border-color);
+	padding: 10px 0;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+html.dark .header {
+	background-color: var(--dark-bg);
+	border-bottom-color: var(--dark-border);
+}
+.header .container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.brand-logo {
+	width: 32px;
+	height: 32px;
+	border-radius: 6px;
+}
+.brand-subtitle {
+	font-size: 0.7rem;
+	color: var(--text-secondary);
+	margin: 0;
+}
+html.dark .brand-subtitle {
+	color: var(--dark-text-secondary);
+}
+.brand-title {
+	font-size: 1.1rem;
+	font-weight: 600;
+	margin: 0;
+	line-height: 1.2;
+} /* Adjusted size */
+.header-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.icon-btn {
+	background-color: var(--card-bg);
+	border: 1px solid var(--border-color);
+	color: var(--text-secondary);
+	border-radius: 6px;
+	width: 32px;
+	height: 32px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 150ms ease;
+}
+.icon-btn:hover {
+	background-color: var(--bg-color);
+	border-color: var(--text-secondary);
+	color: var(--text-primary);
+}
+html.dark .icon-btn {
+	background-color: var(--dark-element-bg);
+	border-color: var(--dark-border);
+	color: var(--dark-text-secondary);
+}
+html.dark .icon-btn:hover {
+	background-color: var(--dark-bg);
+	border-color: var(--dark-text-secondary);
+	color: var(--dark-text-primary);
+}
+.icon-btn .material-icons {
+	font-size: 18px;
+}
+.icon-sun {
+	display: none;
+}
+.icon-moon {
+	display: block;
+}
+html.dark .icon-sun {
+	display: block;
+}
+html.dark .icon-moon {
+	display: none;
+}
+/* General Button Styles (for Back button etc.) */
+.btn-secondary {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background-color: var(--card-bg);
+	border: 1px solid var(--border-color);
+	color: var(--text-primary);
+	border-radius: 6px;
+	padding: 6px 12px;
+	font-weight: 500;
+	font-size: 0.8125rem;
+	text-decoration: none;
+	cursor: pointer;
+	transition: all 150ms ease;
+}
+.btn-secondary:hover {
+	background-color: var(--bg-color);
+	border-color: var(--text-secondary);
+}
+html.dark .btn-secondary {
+	background-color: var(--dark-element-bg);
+	border-color: var(--dark-border);
+	color: var(--dark-text-primary);
+}
+html.dark .btn-secondary:hover {
+	background-color: var(--dark-bg);
+	border-color: var(--dark-text-secondary);
+}
+.btn-secondary .material-icons {
+	font-size: 16px;
+	margin-right: -2px;
+}
+/* 3. Main Content & Cards */
+.main-content {
+	padding: 24px 0;
+}
+.card {
+	background-color: var(--card-bg);
+	border-radius: 8px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+	padding: 20px; /* Consistent padding */
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+	border: 1px solid var(--border-color);
+	margin-bottom: 24px;
+}
+html.dark .card {
+	background-color: var(--dark-element-bg);
+	border: 1px solid var(--dark-border);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid var(--border-color);
+}
+html.dark .card-header {
+	border-bottom-color: var(--dark-border);
+}
+.card-title {
+	font-size: 1.1rem;
+	font-weight: 600;
+	margin: 0;
+}
+/* 4. Domain Header Card */
+.domain-header-card {
+} /* Specific overrides if needed */
+.domain-info {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	margin-bottom: 20px;
+}
+.domain-logo {
+	width: 56px;
+	height: 56px;
+	border-radius: 8px;
+	border: 1px solid var(--border-color);
+	flex-shrink: 0;
+}
+html.dark .domain-logo {
+	border-color: var(--dark-border);
+}
+.domain-details {
+	flex-grow: 1;
+}
+.domain-name-title {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin: 0 0 16px 0;
+	word-break: break-all;
+}
+/* Domain Settings Area */
+.domain-settings {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin-top: 12px;
+	align-items: flex-end;
+}
+.setting-item {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.setting-label {
+	font-size: 0.7rem;
+	font-weight: 500;
+	color: var(--text-secondary);
+	text-transform: uppercase;
+}
+html.dark .setting-label {
+	color: var(--dark-text-secondary);
+}
+/* Form Controls (Select) */
+.control-select {
+	background-color: var(--bg-color);
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	padding: 6px 10px;
+	font-family: var(--font-family);
+	font-size: 0.8125rem;
+	color: var(--text-primary);
+	min-width: 150px; /* Give selects some minimum width */
+	height: 34px; /* Consistent height */
+}
+html.dark .control-select {
+	background-color: var(--dark-bg); /* Use body bg for inputs */
+	border-color: var(--dark-border);
+	color: var(--dark-text-primary);
+}
+select:focus {
+	outline: 2px solid var(--accent-orange);
+	outline-offset: 1px;
+}
+/* Aggregate Stats Grid */
+.domain-stat-grid {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(140px, 1fr)
+	); /* Responsive columns */
+	padding-top: 20px;
+	border-top: 1px solid var(--border-color);
+}
+html.dark .domain-stat-grid {
+	border-top-color: var(--dark-border);
+}
+.stat-item {
+	background-color: var(--bg-color); /* Body bg for stat items */
+	border: 1px solid var(--border-color);
+	padding: 12px;
+	border-radius: 6px;
+}
+html.dark .stat-item {
+	background-color: var(--dark-bg); /* Dark body bg */
+	border-color: var(--dark-border);
+}
+.stat-label {
+	font-size: 0.7rem;
+	font-weight: 500;
+	color: var(--text-secondary);
+	text-transform: uppercase;
+	margin: 0 0 4px 0;
+	display: block;
+}
+html.dark .stat-label {
+	color: var(--dark-text-secondary);
+}
+.stat-value {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--text-primary);
+	margin: 0;
+	line-height: 1.2;
+	word-break: break-word;
+}
+html.dark .stat-value {
+	color: var(--dark-text-primary);
+}
+/* 5. Session History Table Card */
+.session-history-card {
+} /* Specific overrides if needed */
+.table-wrapper {
+	width: 100%;
+	overflow-x: auto;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	background-color: var(--card-bg); /* Use card bg for table wrap */
+}
+html.dark .table-wrapper {
+	background-color: var(--dark-element-bg);
+	border-color: var(--dark-border);
+}
+.data-table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 800px; /* Ensure table scrolls if needed */
+}
+.data-table th,
+.data-table td {
+	padding: 10px 14px;
+	text-align: left;
+	border: none;
+	white-space: nowrap;
+	font-size: 0.8125rem;
+}
+.data-table tbody tr {
+	border-top: 1px solid var(--border-color);
+}
+html.dark .data-table tbody tr {
+	border-top-color: var(--dark-border);
+}
+.data-table th {
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: var(--text-secondary);
+	background-color: var(--bg-color);
+	position: sticky;
+	top: 0;
+	border-bottom: 1px solid var(--border-color);
+	z-index: 1;
+}
+html.dark .data-table th {
+	color: var(--dark-text-secondary);
+	background-color: var(--dark-bg);
+	border-bottom-color: var(--dark-border);
+}
+.data-table tbody tr {
+	transition: background-color 0.1s ease;
+}
+.data-table tbody tr:hover {
+	background-color: var(--bg-color);
+}
+html.dark .data-table tbody tr:hover {
+	background-color: var(--dark-bg);
+}
+.data-table td:nth-child(2), /* Page Title */
+.data-table td:nth-child(3) a {
+	/* URL */
+	white-space: normal; /* Allow wrapping */
+	max-width: 250px; /* Limit width */
+	display: block; /* Needed for ellipsis */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap; /* Force ellipsis */
+}
+.data-table td a {
+	color: var(--accent-orange);
+	text-decoration: none;
+}
+.data-table td a:hover {
+	text-decoration: underline;
+}
+.table-empty-state {
+	text-align: center !important;
+	color: var(--text-secondary);
+	font-style: italic;
+	padding: 20px !important;
+}
+html.dark .table-empty-state {
+	color: var(--dark-text-secondary);
+}
+/* 6. Blacklist Notice */
+.blacklist-notice {
+	background-color: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+	padding: 10px 15px;
+	border-radius: 6px;
+	margin-bottom: 15px;
+	font-weight: 500;
+}
+html.dark .blacklist-notice {
+	background-color: #4b1f24;
+	color: #f8d7da;
+	border-color: #721c24;
+}
+/* 7. General Error Message */
+.error-message {
+	color: var(--accent-crimson);
+	font-weight: 500;
+	margin: 20px 0;
+}
