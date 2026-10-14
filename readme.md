@@ -154,7 +154,7 @@ This project is open source and available under the MIT License.
 - **KARTIKEY TIWARI** - [@tiwarikartik3002](https://github.com/tiwarikartik3002)
 - **VISHAL MITTAL** - [@vishal1mittal](https://github.com/vishal1mittal)
 - **YASH ROHILLA** - [@thanos07890](https://github.com/thanos07890)
-- **SNEHIT PANDEY** - [@dark0b0i](https://github.com/dark0b0i)
+- **SNEHIT PANDEY** - [@SnehitPandey](https://github.com/snehitPandey)
 
 ## 🔗 Links
 
